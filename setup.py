@@ -19,6 +19,7 @@ setuptools.setup(
         "License :: MIT License",
         "Operating System :: OS Independent",
     ],
+    scripts=['bin/xapi-data-analyzer'],
     install_requires=[
         'pandas',
     ],
