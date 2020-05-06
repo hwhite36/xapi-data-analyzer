@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="xapi-data-analyzer-HBlanco36-wboettge",
-    version="0.0.1",
+    version="0.1",
     author="Harrison White and Walt Boettge",
     author_email="hwhite9@wisc.edu, wboettge@wisc.edu",
     description="A Python CLI tool to clean and analyze xAPI data. Intended for use at the University of Wisconsin - "
@@ -18,6 +18,9 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: MIT License",
         "Operating System :: OS Independent",
+    ],
+    install_requires=[
+        'pandas',
     ],
     python_requires='>=3.7',
 )
