@@ -1,6 +1,10 @@
+# MacOS system files and IDE files
 .DS_store
 .idea/
 __pycache__
+
+# Data
+/*.csv
 
 # Compiled python modules.
 *.pyc
