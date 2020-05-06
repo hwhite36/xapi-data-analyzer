@@ -1,7 +1,12 @@
 import pandas as pd
 
-raw_data = pd.read_csv("Chem109 PB Demo Data (Cleaned).csv")
-new_data = pd.read_csv("data4-17-20(cleaned).csv")
-# Get rid of all interactions that don't have emails
-new_data = new_data.dropna(subset=["Email"])
-class_list = set(new_data["Email"])
+raw_data = None
+class_list = None
+
+
+def set_data_vars(data_path):
+    global raw_data
+    global class_list
+    raw_data = pd.read_csv(data_path)
+    raw_data = raw_data.dropna(subset=["Email"])
+    class_list = set(raw_data["Email"])
