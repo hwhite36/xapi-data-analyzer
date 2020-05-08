@@ -1,6 +1,7 @@
 from . import GlobalData
 from .Day import Day
 import pandas as pd
+import sys
 
 
 def main():
@@ -21,14 +22,17 @@ def main():
     print("It usually has a title similar to \"dataMM-DD-YY(cleaned).csv\".\n")
     data_path = input("Please enter the path to the .csv containing the data: ")
 
-    GlobalData.set_data_vars(data_path)
-    df_duration = pd.DataFrame(index=GlobalData.class_list)
+    try:
+        GlobalData.set_data_vars(data_path)
+        df_duration = pd.DataFrame(index=GlobalData.class_list)
 
-    for i in range(int(lower_bound), int(upper_bound) + 1):
-        day = Day(i, GlobalData.raw_data, GlobalData.class_list)
-        df_duration["Day " + str(i)] = day.get_students_duration().values()
-        day.get_day_dataframe().to_csv("Day " + str(i) + ".csv")
+        for i in range(int(lower_bound), int(upper_bound) + 1):
+            day = Day(i, GlobalData.raw_data, GlobalData.class_list)
+            df_duration["Day " + str(i)] = day.get_students_duration().values()
+            day.get_day_dataframe().to_csv("Day " + str(i) + ".csv")
 
-    df_duration.to_csv("StudentDurations.csv")
+        df_duration.to_csv("StudentDurations.csv")
+    except FileNotFoundError:
+        sys.exit("\nERROR: Data file not found! Please double-check the path to the data file and re-run the program.")
 
     print("\nAll files successfully saved!")
