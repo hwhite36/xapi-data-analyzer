@@ -7,7 +7,7 @@ It was created with the goal of parsing and analyzing xAPI data created from H5P
 ### For developers: 
 Clone the repository and navigate to the root directory.
 
-Next, run `pip install -e .`. This installs an "editable" version of the package that makes development easier by creating a .egg-info folder in the project directory, rather than installing the package systemwide.
+Next, run `pip install -e .`. This installs an "editable" version of the package that makes development easier by creating a .egg-info folder in the project directory, rather than installing the package systemwide. This allows you to test changes without having to reinstall every time.
 
 To uninstall, delete the .egg-info folder in the project directory __(and clean your $PYTHONPATH? idk lol)__
 
