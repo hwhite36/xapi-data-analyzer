@@ -1,5 +1,5 @@
-import GlobalData
-from Day import Day
+from . import GlobalData
+from .Day import Day
 import pandas as pd
 
 
