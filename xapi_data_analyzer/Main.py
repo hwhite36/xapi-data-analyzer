@@ -6,7 +6,8 @@ import pandas as pd
 def main():
     print("Welcome to the UW-Madison Chem 109 data analyzer!")
     print("Authors: Walt Boettge and Harrison White\n")
-    print("This program will generate statistics about a range of Pressbooks chapters that you select.")
+    print("This program will generate statistics about a range of Pressbooks chapters (AKA \"Days\", "
+          "as they're called in the Chem 109 curriculum) that you select.")
     print("You will be prompted for the lower and upper bounds of the range of days (inclusive).\n")
     print("A .csv file for each day will be saved in the current directory, which can be "
           "imported into Excel for further data analysis.")
