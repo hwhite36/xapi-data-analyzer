@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'xapi-data-analyzer=xapi-data-analyzer.Main:main'
+            'xapi_data_analyzer = xapi_data_analyzer.Main:main'
         ]
     },
     install_requires=[
