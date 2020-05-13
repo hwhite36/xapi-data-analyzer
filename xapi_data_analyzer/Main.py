@@ -27,7 +27,7 @@ def main():
             upper_bound = int(upper_bound)
             if lower_bound > upper_bound:
                 raise ValueError()
-            if lower_bound < 0:
+            if lower_bound <= 0:
                 raise ValueError()
             input_incorrect = False
         except ValueError:
