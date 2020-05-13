@@ -15,8 +15,24 @@ def main():
     print("A .csv of the time each student spent on each day will also be saved to the current directory.\n")
     print("IMPORTANT NOTE: if you have any .csv files of the same name (Day x.csv or StudentDurations.csv), "
           "they WILL BE OVERWRITTEN!\n")
-    lower_bound = input("Please enter the lower bound: ")
-    upper_bound = input("Please enter the upper bound: ")
+
+    lower_bound = None
+    upper_bound = None
+    input_incorrect = True
+    while input_incorrect:
+        lower_bound = input("Please enter the lower bound: ")
+        upper_bound = input("Please enter the upper bound: ")
+        try:
+            lower_bound = int(lower_bound)
+            upper_bound = int(upper_bound)
+            if lower_bound > upper_bound:
+                raise ValueError()
+            if lower_bound < 0:
+                raise ValueError()
+            input_incorrect = False
+        except ValueError:
+            print("ERROR: invalid input. Please enter only positive integers, and make sure the lower bound is "
+                  "less than or equal to the upper bound.\n")
 
     print("\nThe program also depends on a .csv of the xAPI data cleaned by the DoIT Learning Locker script.")
     print("It usually has a title similar to \"dataMM-DD-YY(cleaned).csv\".\n")
