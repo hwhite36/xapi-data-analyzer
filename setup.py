@@ -27,5 +27,5 @@ setuptools.setup(
     install_requires=[
         'pandas',
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.0',
 )
