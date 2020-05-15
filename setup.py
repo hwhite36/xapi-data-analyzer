@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="xapi-data-analyzer-HBlanco36-wboettge",
-    version="0.1",
+    name="xapi-data-analyzer",
+    version="1.0",
     author="Harrison White and Walt Boettge",
     author_email="hwhite9@wisc.edu, wboettge@wisc.edu",
     description="A Python CLI tool to clean and analyze xAPI data. Intended for use at the University of Wisconsin - "
