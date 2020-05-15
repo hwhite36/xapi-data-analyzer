@@ -45,7 +45,7 @@ The file's absolute path or relative path may be used. For example, imagine the 
                 data4-18-20.csv
 ```
 
-Say the user runs `xapi-data-analyzer` in `~/` (which is equivalent to `/home/user1`) with the intention of analyzing data from 5/15/2020. When prompted for the path to the data, the user could either enter `/home/user1/data/data5-15-20(cleaned).csv` (the absolute path) or `data/data5-15-20(cleaned).csv` (the relative path).
+Say the user runs `xapi-data-analyzer` in `~/` (which is equivalent to `/home/user1/`) with the intention of analyzing data from 5/15/2020. When prompted for the path to the data, the user could either enter `/home/user1/data/data5-15-20(cleaned).csv` (the absolute path) or `data/data5-15-20(cleaned).csv` (the relative path).
 
 ### What's saved
 The program will save a spreadsheet for each chapter that you requested data about. These will be named `Chapter x.csv` and will be saved in the current directory. A spreadsheet containing information on students' time spent will also be saved, named `StudentDurations.csv`.
