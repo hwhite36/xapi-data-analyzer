@@ -49,5 +49,7 @@ Say the user runs `xapi-data-analyzer` in `~/` (which is equivalent to `/home/us
 
 ### What's saved
 The program will save a spreadsheet for each chapter that you requested data about. These will be named `Chapter x.csv` and will be saved in the current directory. A spreadsheet containing information on students' time spent will also be saved, named `StudentDurations.csv`.
+
+It's important to note that if there are any .csv files of the same name in the same directory, __they will be overwritten!__
 ## License
 This package is licensed under the MIT License. The full license text is available in LICENSE in the root directory.
