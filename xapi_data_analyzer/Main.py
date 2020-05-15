@@ -1,7 +1,6 @@
 from . import GlobalData
 from .Day import Day
 import pandas as pd
-import sys
 import os
 
 
@@ -16,6 +15,7 @@ def clear():
 
 
 def main():
+    clear()
     print("Welcome to the UW-Madison Chem 109 data analyzer!")
     print("Authors: Walt Boettge and Harrison White\n")
 
@@ -54,20 +54,22 @@ def main():
             print("ERROR: invalid input. Please enter only positive integers, and make sure the lower bound is "
                   "less than or equal to the upper bound.\n")
 
-    data_path = input("Please enter the path to the .csv containing the data: ")
+    input_incorrect = True
+    while input_incorrect:
+        data_path = input("Please enter the path to the .csv containing the data: ")
+        try:
+            GlobalData.set_data_vars(data_path)
+            df_duration = pd.DataFrame(index=GlobalData.class_list)
 
-    try:
-        GlobalData.set_data_vars(data_path)
-        df_duration = pd.DataFrame(index=GlobalData.class_list)
+            for i in range(int(lower_bound), int(upper_bound) + 1):
+                day = Day(i, GlobalData.raw_data, GlobalData.class_list)
+                df_duration["Day " + str(i)] = day.get_students_duration().values()
+                day.get_day_dataframe().to_csv("Day " + str(i) + ".csv")
 
-        for i in range(int(lower_bound), int(upper_bound) + 1):
-            day = Day(i, GlobalData.raw_data, GlobalData.class_list)
-            df_duration["Day " + str(i)] = day.get_students_duration().values()
-            day.get_day_dataframe().to_csv("Day " + str(i) + ".csv")
-
-        df_duration.to_csv("StudentDurations.csv")
-        clear()
-    except FileNotFoundError:
-        sys.exit("\nERROR: Data file not found! Please double-check the path to the data file and re-run the program.")
+            df_duration.to_csv("StudentDurations.csv")
+            clear()
+            input_incorrect = False
+        except FileNotFoundError:
+            print("\nERROR: Data file not found! Please double-check the path to the data file and try again.\n")
 
     print("All files successfully saved!")
