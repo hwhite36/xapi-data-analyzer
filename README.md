@@ -1,13 +1,16 @@
 # xapi-data-analyzer
 This package was originally created by Walt Boettge and Harrison White, working under Dr. John Moore at the University of Wisconsin-Madison Department of Chemistry.
 
-It was created with the goal of parsing and analyzing xAPI data created from H5P elements embedded within the CHEM 109 online textbook. The program relies on the data being present as an exported .csv file from the UW-Madison Learning Locker, and cleaned with DoIT's cleaning script.
+It was created with the goal of parsing and analyzing xAPI data created from H5P elements embedded within the CHEM 109 Pressbooks online textbook. The program relies on the data being present as an exported .csv file from the UW-Madison Learning Locker, and cleaned with DoIT's cleaning script.
+
+### Note for developers: 
+The CHEM 109 curriculum refers to Pressbooks chapters as "Days," which is why variable names within the code use this terminology. The program was somewhat generalized after a working version was created; however, the regular expression that determines the H5P ID list relies on H5P elements being named following this terminology. In order to adapt this project for your own usage, you'd probably have to modify the expression or accept a list of IDs as input.
 
 ## Installation
 ### For developers: 
 Clone the repository and navigate to the root directory.
 
-Next, run `pip install -e .`. This installs an "editable" version of the package that makes development easier by creating a .egg-info folder in the project directory, rather than installing the package systemwide. This allows you to test changes without having to reinstall every time.
+Next, run `pip install -e .`. This installs an "editable" version of the package that makes development easier by creating a .egg-info folder in the project directory, rather than installing the package system-wide. This allows you to test changes without having to reinstall every time.
 
 To uninstall, delete the .egg-info folder in the project directory __(and clean your $PYTHONPATH? idk lol)__
 
