@@ -58,12 +58,15 @@ def main():
                 GlobalData.set_data_vars(values["FILEIN"])
                 df_duration = pd.DataFrame(index=GlobalData.class_list)
 
+                # Crank out CSVs for each day and save em to the current directory
                 for i in range(int(lower_bound), int(upper_bound) + 1):
                     day = Day(i, GlobalData.raw_data, GlobalData.class_list)
                     df_duration["Chapter " + str(i)] = day.get_students_duration().values()
                     day.get_day_dataframe().to_csv("Chapter " + str(i) + ".csv")
 
                 df_duration.to_csv("StudentDurations.csv")
+
+                sg.Popup("All files successfully saved!", title="Success!")
 
             except ValueError:
                 sg.Popup("ERROR: invalid input. Please enter only positive integers, and make sure the lower bound is "
@@ -72,7 +75,7 @@ def main():
                 sg.Popup("ERROR: Data file not found! Please double-check the path to the data file and try again.",
                          title="Error")
 
-    print("All files successfully saved!")
+    main_window.close()
 
 
 main()
