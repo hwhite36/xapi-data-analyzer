@@ -8,5 +8,5 @@ def set_data_vars(data_path):
     global raw_data
     global class_list
     raw_data = pd.read_csv(data_path)
-    raw_data = raw_data.dropna(subset=["Email"])
-    class_list = set(raw_data["Email"])
+    raw_data = raw_data.dropna(subset=["Name"])
+    class_list = set(raw_data["Name"])

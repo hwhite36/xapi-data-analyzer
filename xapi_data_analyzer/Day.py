@@ -15,7 +15,7 @@ class Day:
         self.day_number = day_number
         self.data = data  # Needed so generate_id_list has some data
         self.id_list = self.generate_id_list()
-        self.data = data[data["H5P ID"].isin(self.id_list)]  # Now data can be trimmed
+        self.data = data[data["object name?"].isin(self.id_list)]  # Now data can be trimmed
         self.class_list = class_list
         self.class_size = len(class_list)
 
@@ -28,7 +28,7 @@ class Day:
 
         for index, row in self.data.iterrows():
             if re.match(pattern, str(row["Question/Slide"])):
-                id_list.add(row["H5P ID"])
+                id_list.add(row["object name?"])
         return sorted(id_list)
 
     def get_question_name_dict(self):
@@ -40,7 +40,7 @@ class Day:
         question_name_dict = {}
         for index, row in self.data.iterrows():
             if pd.notna(row["Question/Slide"]):
-                question_name_dict[row["H5P ID"]] = row["Question/Slide"]
+                question_name_dict[row["object name?"]] = row["Question/Slide"]
 
         # Sorts the dictionary by key, but preserves dictionary type
         question_name_dict = collections.OrderedDict(sorted(question_name_dict.items()))
@@ -56,9 +56,9 @@ class Day:
         interacted_dict = {k: [] for k in self.id_list}
         for index, row in self.data.iterrows():
             if (row["Verb"] == "interacted" or row["Verb"] == "attempted" or row["Verb"] == "progressed"
-                    or row["Verb"] == "completed" or row["Verb"] == "experienced") and pd.notna(row["Email"]):
-                if not (row["Email"] in interacted_dict[row["H5P ID"]]):
-                    interacted_dict[row["H5P ID"]].append(row["Email"])
+                    or row["Verb"] == "completed" or row["Verb"] == "experienced") and pd.notna(row["Name"]):
+                if not (row["Name"] in interacted_dict[row["object name?"]]):
+                    interacted_dict[row["object name?"]].append(row["Name"])
 
         return interacted_dict
 
@@ -90,7 +90,7 @@ class Day:
         duration_dict = {k: [] for k in self.id_list}
         for index, row in self.data.iterrows():
             if pd.notna(row["Duration"]):
-                duration_dict[row["H5P ID"]].append(row["Duration"])
+                duration_dict[row["object name?"]].append(row["Duration"])
 
         average_duration_dict = dict.fromkeys(self.id_list)
         for key in duration_dict:
@@ -109,8 +109,8 @@ class Day:
         """
         students_duration_dict = {k: [0] for k in self.class_list}
         for index, row in self.data.iterrows():
-            if pd.notna(row["Email"]) and pd.notna(row["Duration"]):
-                students_duration_dict[row["Email"]].append(row["Duration"])
+            if pd.notna(row["Name"]) and pd.notna(row["Duration"]):
+                students_duration_dict[row["Name"]].append(row["Duration"])
 
         for student in self.class_list:
             students_duration_dict[student] = max(students_duration_dict[student])
@@ -124,7 +124,7 @@ class Day:
         :return: a complete dataframe containing all we want to know from the raw data regarding specific elements
         """
         df = pd.DataFrame(index=self.id_list)
-        df["H5P ID"] = self.id_list
+        df["object name?"] = self.id_list
         df["Element Name"] = self.get_question_name_dict().values()
         df["List of users who interacted"] = self.get_interacted_dict().values()
         df["% of users who interacted"] = self.get_percent_interacted().values()
