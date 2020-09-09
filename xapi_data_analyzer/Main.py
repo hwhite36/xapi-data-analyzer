@@ -2,17 +2,6 @@ import GlobalData
 from Day import Day
 import pandas as pd
 import PySimpleGUI as sg
-import ctypes
-import platform
-
-
-def make_dpi_aware():
-    """
-    Helps PySimpleGUI not be blurry on high-dpi monitors. Taken from
-    https://github.com/PySimpleGUI/PySimpleGUI/issues/1179
-    """
-    if int(platform.release()) >= 8:
-        ctypes.windll.shcore.SetProcessDpiAwareness(True)
 
 
 def create_main_window():
@@ -22,20 +11,19 @@ def create_main_window():
                  "(usually called dataMM-DD-YY(cleaned).csv)")],
         [sg.FileBrowse(key="FILEIN")],
         [sg.Text("Next, please enter the lower and upper bounds of the range of chapters (inclusive).")],
-        [sg.Text("Lower:"), sg.InputText(size=(1, 2), key="LOWERBOUND"), sg.Text("Upper:"),
-         sg.InputText(size=(1, 2), key="UPPERBOUND")],
+        [sg.Text("Lower:"), sg.InputText(size=(3, 1), key="LOWERBOUND"), sg.Text("Upper:"),
+         sg.InputText(size=(3, 1), key="UPPERBOUND")],
         [sg.Text("A .csv file for each chapter will be saved in the current directory, which can be imported into Excel"
                  " for further data analysis.")],
         [sg.Text("A .csv of the time each student spent on each chapter will also be saved to the current directory.")],
         [sg.Text("If you have any .csv files of the same name (Day x.csv or StudentDurations.csv), THEY WILL BE "
                  "OVERWRITTEN!", text_color="red")],
-        [sg.Button("Go", size=(1, 4)), sg.Exit()]
+        [sg.Button("Go", size=(4, 1)), sg.Exit()]
     ]
     return sg.Window("xAPI Data Analyzer", layout, element_justification="center")
 
 
 def main():
-    make_dpi_aware()
     sg.theme("SystemDefault")
 
     main_window = create_main_window()
