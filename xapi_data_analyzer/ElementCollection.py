@@ -1,35 +1,22 @@
 import pandas as pd
 import collections
-import re
 
 
-class Day:
+class ElementCollection:
     """
-    Contains information about a Pressbooks chapter, including:
-    - Day Number/title
-    - the H5P elements in the chapter
-    - Students who interacted with H5P elements within the day
+    Contains information about the range of user-provided H5P elements, including:
+    - the H5P ID
+    - the H5P element name
+    - A list of students who interacted with the element
+    - The percent of the class that interacted with the element
+    - The average time spent on the element
     """
 
-    def __init__(self, day_number, data, class_list):
-        self.day_number = day_number
-        self.data = data  # Needed so generate_id_list has some data
-        self.id_list = self.generate_id_list()
+    def __init__(self, id_list, data, class_list):
+        self.id_list = id_list
         self.data = data[data["object name?"].isin(self.id_list)]  # Now data can be trimmed
         self.class_list = class_list
         self.class_size = len(class_list)
-
-    def generate_id_list(self):
-        """
-        :return: a list of H5P id's corresponding with the day
-        """
-        id_list = set([])
-        pattern = re.compile("D0?" + str(self.day_number) + "|" + "Day0?" + str(self.day_number))
-
-        for index, row in self.data.iterrows():
-            if re.match(pattern, str(row["Question/Slide"])):
-                id_list.add(row["object name?"])
-        return sorted(id_list)
 
     def get_question_name_dict(self):
         """
@@ -64,8 +51,8 @@ class Day:
 
     def get_percent_interacted(self):
         """
-        Iterates over the dictionary returned by get_interacted_dict to calculate the percent of users who interacted with
-        each H5P element.
+        Iterates over the dictionary returned by get_interacted_dict to calculate the percent of users who interacted
+        with each H5P element.
         :param: none
         :return: a dict with keys = H5P ID and values = % of users who interacted
         """
@@ -105,7 +92,7 @@ class Day:
     def get_students_duration(self):
         """
         :param: none
-        :return: a dictionary mapping students to their duration on the day
+        :return: a dictionary mapping students to their duration
         """
         students_duration_dict = {k: [0] for k in self.class_list}
         for index, row in self.data.iterrows():
@@ -117,7 +104,7 @@ class Day:
 
         return students_duration_dict
 
-    def get_day_dataframe(self):
+    def get_dataframe(self):
         """
         Puts everything together into a dataframe specific for the day.
         :param: none
