@@ -1,4 +1,3 @@
-Remove any traces of Day object in code
 Add count of users interacted in output
 Figure out which H5P elements actually should have people interacting with them
 Figure out approx class size
