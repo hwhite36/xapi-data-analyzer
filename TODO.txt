@@ -4,3 +4,4 @@ Figure out approx class size
 Switch to using raw data
 Fix durations
 Output cool graphs and more useful stuff than just a .csv, lol
+Update README on GitHub

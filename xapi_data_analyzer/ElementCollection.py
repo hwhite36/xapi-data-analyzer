@@ -44,10 +44,8 @@ class ElementCollection:
         """
         interacted_dict = {k: [] for k in self.id_list}
         for index, row in self.data.iterrows():
-            if (row["Verb"] == "interacted" or row["Verb"] == "attempted" or row["Verb"] == "progressed"
-                    or row["Verb"] == "completed" or row["Verb"] == "experienced") and pd.notna(row["Name"]):
-                if not (row["Name"] in interacted_dict[row["object name?"]]):
-                    interacted_dict[row["object name?"]].append(row["Name"])
+            if not (row["Name"] in interacted_dict[row["object name?"]]):
+                interacted_dict[row["object name?"]].append(row["Name"])
 
         return interacted_dict
 
