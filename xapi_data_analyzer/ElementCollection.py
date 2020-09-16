@@ -21,6 +21,7 @@ class ElementCollection:
     def get_question_name_dict(self):
         """
         Iterates over the raw data. If "Question/Slide" for a row is populated, it adds it to a dictionary.
+
         :param: none
         :return: a dictionary with keys = H5P ID and values = Question/Slide
         """
@@ -37,6 +38,7 @@ class ElementCollection:
         """
         Iterates over the raw data. Adds a user to a dictionary if they interacted with an element (defined by
         certain verbs in xAPI).
+
         :param: none
         :return: a dict with keys = H5P ID and values = lists of users who interacted
         """
@@ -53,6 +55,7 @@ class ElementCollection:
         """
         Iterates over the dictionary returned by get_interacted_dict to calculate the percent of users who interacted
         with each H5P element.
+
         :param: none
         :return: a dict with keys = H5P ID and values = % of users who interacted
         """
@@ -71,6 +74,7 @@ class ElementCollection:
         This looks in the "duration" column of the raw data and calculates the average of any values there for each
         element. Not perfect, but if the data in the duration column is actually representative of time taken,
         it should give a ballpark number.
+
         :param: none
         :return: a dict with keys = H5P ID and values = average time spent
         """
@@ -91,6 +95,8 @@ class ElementCollection:
 
     def get_students_duration(self):
         """
+        Calculates each student's time spent on the range of
+
         :param: none
         :return: a dictionary mapping students to their duration
         """
@@ -106,7 +112,8 @@ class ElementCollection:
 
     def get_dataframe(self):
         """
-        Puts everything together into a dataframe specific for the day.
+        Puts everything together into a dataframe specific for the range of H5P IDs.
+
         :param: none
         :return: a complete dataframe containing all we want to know from the raw data regarding specific elements
         """

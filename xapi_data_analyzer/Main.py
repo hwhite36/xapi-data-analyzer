@@ -41,12 +41,13 @@ def main():
                 GlobalData.set_data_vars(values["FILEIN"])
                 df_duration = pd.DataFrame(index=GlobalData.class_list)
 
-                # Generate a timestamp + ElementCollection object and crank out the two CSVs
+                # Generate a CST timestamp + ElementCollection object
                 timestamp = datetime.now(pytz.timezone("America/Chicago"))
                 element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list)
                 df_duration["Duration"] = element_collection.get_students_duration().values()
-                element_collection.get_dataframe().to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
 
+                # Generate the CSVs
+                element_collection.get_dataframe().to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
                 df_duration.to_csv("StudentDurations_" + str(timestamp) + ".csv")
 
                 sg.Popup("All files successfully saved!", title="Success!")
