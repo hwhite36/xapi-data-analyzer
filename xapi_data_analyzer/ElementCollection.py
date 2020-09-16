@@ -95,7 +95,7 @@ class ElementCollection:
         :param: none
         :return: a dictionary mapping students to their duration
         """
-        durations = {}
+        durations = {k: [] for k in self.id_list}
         delta_max = datetime.timedelta(minutes=10)
         for student in self.class_list:
             student_df = self.data[self.data['Name'] == student].reset_index()
@@ -105,6 +105,7 @@ class ElementCollection:
                 if delta < delta_max:
                     duration += delta
                 durations[student] = duration.total_seconds() / 60
+        print(len(durations))
         return durations
 
     def get_dataframe(self):
