@@ -1,7 +1,7 @@
-Fix keyerror
 Remove any traces of Day object in code
 Add count of users interacted in output
 Figure out which H5P elements actually should have people interacting with them
 Figure out approx class size
 Switch to using raw data
 Fix durations
+Output cool graphs and more useful stuff than just a .csv, lol
