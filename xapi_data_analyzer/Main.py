@@ -36,7 +36,7 @@ def main():
             try:
                 # Parse the ID list
                 id_list = values["IDLIST"].split(",")
-                [item.strip() for item in id_list]
+                id_list = [int(item.strip()) for item in id_list]
 
                 GlobalData.set_data_vars(values["FILEIN"])
                 df_duration = pd.DataFrame(index=GlobalData.class_list)
@@ -52,10 +52,12 @@ def main():
                 sg.Popup("All files successfully saved!", title="Success!")
 
             except KeyError as e:
-                # FIXME for some reason this error is always thrown, even for valid keys.
                 sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
             except FileNotFoundError:
                 sg.Popup("ERROR: Data file not found! Please double-check the path to the data file and try again.",
+                         title="Error")
+            except ValueError:
+                sg.Popup("ERROR: The items entered in the H5P ID list were not valid integers! Please try again.",
                          title="Error")
 
     main_window.close()
