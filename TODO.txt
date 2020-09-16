@@ -2,5 +2,6 @@ Figure out which H5P elements actually should have people interacting with them
 Figure out approx class size
 Switch to using raw data
 Fix durations
-Output cool graphs and more useful stuff than just a .csv, lol
+Compile with PyInstaller on a Windows machine and distribute to John
+Output cool graphs and more useful stuff than just a .csv, lol (matplotlib? Jupyter?)
 Update README on GitHub
