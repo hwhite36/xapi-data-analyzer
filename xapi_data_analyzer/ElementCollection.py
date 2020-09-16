@@ -118,7 +118,9 @@ class ElementCollection:
         df = pd.DataFrame(index=self.id_list)
         df["object name?"] = self.id_list
         df["Element Name"] = self.get_question_name_dict().values()
-        df["List of users who interacted"] = self.get_interacted_dict().values()
+        interacted_dict_values = self.get_interacted_dict().values()
+        df["List of users who interacted"] = interacted_dict_values
+        df["Number of users who interacted"] = len(interacted_dict_values)
         df["% of users who interacted"] = self.get_percent_interacted().values()
         df["Average duration (sec)"] = self.get_duration().values()
         return df
