@@ -40,22 +40,23 @@ def main():
 
                 GlobalData.set_data_vars(values["FILEIN"])
 
-                # Generate a timestamp + ElementCollection object and crank out the two CSVs
+                # Generate a CST timestamp + ElementCollection object
                 timestamp = datetime.now(pytz.timezone("America/Chicago"))
                 element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list)
                 element_collection.get_dataframe().to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
 
-                print(element_collection.get_students_duration())
                 df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
                 df_students.to_csv("StudentDurations_" + str(timestamp) + ".csv")
 
                 sg.Popup("All files successfully saved!", title="Success!")
 
             except KeyError as e:
-                # FIXME for some reason this error is always thrown, even for valid keys.
                 sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
             except FileNotFoundError:
                 sg.Popup("ERROR: Data file not found! Please double-check the path to the data file and try again.",
+                         title="Error")
+            except ValueError:
+                sg.Popup("ERROR: The items entered in the H5P ID list were not valid integers! Please try again.",
                          title="Error")
 
     main_window.close()
