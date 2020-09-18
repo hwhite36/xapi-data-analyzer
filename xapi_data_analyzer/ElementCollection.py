@@ -1,5 +1,6 @@
 import pandas as pd
 import collections
+import datetime
 
 
 class ElementCollection:
@@ -98,15 +99,17 @@ class ElementCollection:
         :param: none
         :return: a dictionary mapping students to their duration
         """
-        students_duration_dict = {k: [0] for k in self.class_list}
-        for index, row in self.data.iterrows():
-            if pd.notna(row["Name"]) and pd.notna(row["Duration"]):
-                students_duration_dict[row["Name"]].append(row["Duration"])
-
+        durations = {}
+        delta_max = datetime.timedelta(minutes=10)
         for student in self.class_list:
-            students_duration_dict[student] = max(students_duration_dict[student])
-
-        return students_duration_dict
+            student_df = self.data[self.data['Name'] == student].reset_index()
+            duration = datetime.timedelta()
+            for index in range(0, len(student_df) - 1):
+                delta = student_df.iloc[index]['Date_Time'] - student_df.iloc[index + 1]['Date_Time']
+                if delta < delta_max:
+                    duration += delta
+                durations[student] = duration.total_seconds() / 60
+        return durations
 
     def get_dataframe(self):
         """
