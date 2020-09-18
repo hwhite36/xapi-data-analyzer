@@ -6,7 +6,7 @@ Output cool graphs and more useful stuff than just a .csv, lol (matplotlib? Jupy
 Update README on GitHub
 Do some nicer string formatting for the timestamp filenames
 
-9/11-9/17: Day 5, 6, 7, 8
+9/11-9/17: Day 5, 6, 7
 Day 5 IDs: 383, 57, 36, 54, 55, 210, 244, 211, 206, 222, 63, 207, 65, 374, 418
 Day 6 IDs: 228, 208, 230, 231, 270, 70, 94, 95, 71, 234, 75, 235, 76, 237, 78, 79, 80, 81, 199, 279
 Day 7 IDs: 385, 256, 390, 89, 93, 391, 419
