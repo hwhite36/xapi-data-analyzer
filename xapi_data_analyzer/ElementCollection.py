@@ -25,7 +25,7 @@ class ElementCollection:
         :param: none
         :return: a dictionary with keys = H5P ID and values = Question/Slide
         """
-        question_name_dict = {}
+        question_name_dict = dict.fromkeys(self.id_list)
         for index, row in self.data.iterrows():
             if pd.notna(row["Question/Slide"]):
                 question_name_dict[row["object name?"]] = row["Question/Slide"]
@@ -120,7 +120,7 @@ class ElementCollection:
         df["Element Name"] = self.get_question_name_dict().values()
         interacted_dict_values = self.get_interacted_dict().values()
         df["List of users who interacted"] = interacted_dict_values
-        df["Number of users who interacted"] = len(interacted_dict_values)
+        df["Number of users who interacted"] = [len(val) for val in interacted_dict_values]
         df["% of users who interacted"] = self.get_percent_interacted().values()
         df["Average duration (sec)"] = self.get_duration().values()
         return df
