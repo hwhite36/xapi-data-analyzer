@@ -43,10 +43,8 @@ class ElementCollection:
         """
         interacted_dict = {k: [] for k in self.id_list}
         for index, row in self.data.iterrows():
-            if (row["Verb"] == "interacted" or row["Verb"] == "attempted" or row["Verb"] == "progressed"
-                    or row["Verb"] == "completed" or row["Verb"] == "experienced") and pd.notna(row["Name"]):
-                if not (row["Name"] in interacted_dict[row["object name?"]]):
-                    interacted_dict[row["object name?"]].append(row["Name"])
+            if not (row["Name"] in interacted_dict[row["object name?"]]):
+                interacted_dict[row["object name?"]].append(row["Name"])
 
         return interacted_dict
 
@@ -95,7 +93,7 @@ class ElementCollection:
         :param: none
         :return: a dictionary mapping students to their duration
         """
-        durations = {k: [] for k in self.id_list}
+        durations = {}
         delta_max = datetime.timedelta(minutes=10)
         for student in self.class_list:
             student_df = self.data[self.data['Name'] == student].reset_index()
@@ -105,7 +103,6 @@ class ElementCollection:
                 if delta < delta_max:
                     duration += delta
                 durations[student] = duration.total_seconds() / 60
-        print(len(durations))
         return durations
 
     def get_dataframe(self):

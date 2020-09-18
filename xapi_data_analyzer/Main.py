@@ -36,7 +36,7 @@ def main():
             try:
                 # Parse the ID list
                 id_list = values["IDLIST"].split(",")
-                [item.strip() for item in id_list]
+                id_list = [int(item.strip()) for item in id_list]
 
                 GlobalData.set_data_vars(values["FILEIN"])
 
@@ -45,6 +45,7 @@ def main():
                 element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list)
                 element_collection.get_dataframe().to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
 
+                print(element_collection.get_students_duration())
                 df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
                 df_students.to_csv("StudentDurations_" + str(timestamp) + ".csv")
 
