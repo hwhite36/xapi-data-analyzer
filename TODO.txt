@@ -1,6 +1,4 @@
-Figure out approx class size
 Switch to using raw data
-Fix durations
 Compile with PyInstaller on a Windows machine and distribute to John
 Output cool graphs and more useful stuff than just a .csv, lol (matplotlib? Jupyter?)
 Update README on GitHub
