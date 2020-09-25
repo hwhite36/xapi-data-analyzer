@@ -30,9 +30,9 @@ def create_graphs_window():
         [sg.Text("All files have been successfully saved into the current directory!")],
         [sg.Text("If you would like, you can generate some graphs now, or use the files to make your own.")],
         [sg.Text("Generate:")],
-        [sg.Button("Student % Interacted Graph", button_color=("white", "green"))],
-        [sg.Button("Student Count Interacted Graph", button_color=("white", "green"))],
-        [sg.Button("Student Duration Graph", button_color=("white", "green"))]
+        [sg.Button("Student % Interacted Graph", button_color=("white", "green"), size=(30, 1))],
+        [sg.Button("Student Count Interacted Graph", button_color=("white", "green"), size=(30, 1))],
+        [sg.Button("Student Duration Graph", button_color=("white", "green"), size=(30, 1))]
     ]
     return sg.Window("Generate Graphs", layout, element_justification="center")
 
@@ -99,7 +99,7 @@ def main():
                     plt.show()
 
                 if event == "Student Duration Graph":
-                    plt.plot(df_students["Durations"], np.zeros_like(df_students["Durations"]), "x")
+                    plt.plot(df_students["Durations"], np.zeros_like(df_students["Durations"]), "x")  # TODO make this a histogram
                     plt.xlabel("Duration (min)")
                     plt.show()
 
