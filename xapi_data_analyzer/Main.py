@@ -55,14 +55,19 @@ def main():
                 GlobalData.set_data_vars(values["FILEIN"])
 
                 # Generate a CST timestamp + ElementCollection object
-                timestamp = datetime.now(pytz.timezone("America/Chicago"))
+                timestamp = str(datetime.now(pytz.timezone("America/Chicago")))
                 element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list)
 
+                # Make the timestamp a little prettier
+                timestamp = timestamp.replace(" ", "_")
+                timestamp = timestamp.replace(":", "-")
+                timestamp = timestamp[:timestamp.rindex(".")]
+
                 elements_df = element_collection.get_dataframe()
-                elements_df.to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
+                elements_df.to_csv("xAPI-Data-Analyzer_" + timestamp + ".csv")
 
                 df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index', columns=["Durations"])
-                df_students.to_csv("StudentDurations_" + str(timestamp) + ".csv")
+                df_students.to_csv("StudentDurations_" + timestamp + ".csv")
 
             except KeyError as e:
                 sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
