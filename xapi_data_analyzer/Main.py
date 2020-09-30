@@ -7,7 +7,6 @@ import pytz
 import matplotlib.pyplot as plt
 
 
-
 def create_main_window():
     layout = [
         [sg.Text("UW-Madison xAPI Data Analyzer", font="Any 15 bold")],
