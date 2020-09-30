@@ -5,7 +5,7 @@ import PySimpleGUI as sg
 from datetime import datetime
 import pytz
 import matplotlib.pyplot as plt
-import numpy as np
+
 
 
 def create_main_window():
