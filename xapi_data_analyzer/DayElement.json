@@ -58,6 +58,246 @@
       "Elements": [
         385, 256, 390, 89, 93, 391, 419
       ]
+    },
+    "Day_9": {
+      "Title": "Bond Properties; Valence Bond Theory",
+      "DayNumber": 9,
+      "Unit": 2,
+      "Elements": [
+        96, 194, 195, 97, 196, 98, 197, 242, 285, 420
+      ]
+    },
+    "Day_10": {
+      "Title": "Hybrid Orbitals; Molecular Geometry",
+      "DayNumber": 10,
+      "Unit": 2,
+      "Elements": [
+        245, 246, 247, 426, 249, 250, 293, 252, 295, 253, 105, 254, 302, 303, 255, 423,
+      ]
+    },
+    "Day_11": {
+      "Title": "Molecular Structure: Isomers",
+      "DayNumber": 11,
+      "Unit": 2,
+      "Elements": [
+        258, 259, 402, 397, 398, 84, 260, 102, 262, 399, 400, 266, 269, 268, 108, 424
+      ]
+    },
+    "Day_12": {
+      "Title": "Intermolecular Forces; Functional Groups",
+      "DayNumber": 12,
+      "Unit": 2,
+      "Elements": [
+        404, 107, 403, 271, 272, 273, 275, 425
+      ]
+    },
+    "Day_13": {
+      "Title": "Alcohols, Carboxylic Acids, Amines, Amides; Hydrogen Bonding",
+      "DayNumber": 13,
+      "Unit": 2,
+      "Elements": [
+        110, 111, 276, 277, 113, 112, 405, 280, 427
+      ]
+    },
+    "Day_14": {
+      "Title": "Macromolecules",
+      "DayNumber": 14,
+      "Unit": 2,
+      "Elements": [
+        406, 410, 115, 408, 411, 407, 409, 412, 429
+      ]
+    },
+    "Day_15": {
+      "Title": "Condensation Polymers, Proteins",
+      "DayNumber": 15,
+      "Unit": 2,
+      "Elements": [
+        281, 178, 413, 430, 428
+      ]
+    },
+    "Day_16": {
+      "Title": "DNA and Lipids",
+      "DayNumber": 16,
+      "Unit": 2,
+      "Elements": [
+        119, 431, 432
+      ]
+    },
+    "Day_18": {
+      "Title": "Reaction Rate",
+      "DayNumber": 18,
+      "Unit": 3,
+      "Elements": [
+        287, 121, 288, 289, 122, 290, 291, 292, 421
+      ]
+    },
+    "Day_19": {
+      "Title": "Integrated Rate Law",
+      "DayNumber": 19,
+      "Unit": 3,
+      "Elements": [
+        294, 296, 297, 298, 433, 434
+      ]
+    },
+    "Day_20": {
+      "Title": "Rate of Radioactive Decay",
+      "DayNumber": 20,
+      "Unit": 3,
+      "Elements": [
+        299, 123, 124, 125, 126, 300, 301, 304, 305, 306, 435
+      ]
+    },
+    "Day_21": {
+      "Title": "Reaction Energy Diagram and Arrhenius Equation",
+      "DayNumber": 21,
+      "Unit": 3,
+      "Elements": [
+        201, 307, 436, 309, 312, 437
+      ]
+    },
+    "Day_22": {
+      "Title": "Elementary Reactions",
+      "DayNumber": 22,
+      "Unit": 3,
+      "Elements": [
+        128, 200, 129, 203, 204, 130, 438
+      ]
+    },
+    "Day_23": {
+      "Title": "Reaction Mechanisms",
+      "DayNumber": 23,
+      "Unit": 3,
+      "Elements": [
+        439, 317, 316, 440, 442, 314, 441
+      ]
+    },
+    "Day_24": {
+      "Title": "Enzymes and Enzyme Catalysis",
+      "DayNumber": 24,
+      "Unit": 3,
+      "Elements": [
+        136, 444, 315, 443
+      ]
+    },
+    "Day_25": {
+      "Title": "Homogeneous and Heterogeneous Catalysis",
+      "DayNumber": 25,
+      "Unit": 3,
+      "Elements": [
+        445, 318, 133, 134, 135, 446
+      ]
+    },
+    "Day_27": {
+      "Title": "Thermochemistry and Enthalpy",
+      "DayNumber": 27,
+      "Unit": 4,
+      "Elements": [
+        319, 138, 139, 320, 321, 322, 323, 192, 193, 324, 140, 325
+      ]
+    },
+    "Day_28": {
+      "Title": "Entropy, Gibbs Free Energy",
+      "DayNumber": 28,
+      "Unit": 4,
+      "Elements": [
+        326, 141, 327, 328, 329, 330, 142
+      ]
+    },
+    "Day_29": {
+      "Title": "Gibbs Free Energy, Chemical Equilibrium",
+      "DayNumber": 29,
+      "Unit": 4,
+      "Elements": [
+        334, 335, 336, 339, 340, 144, 341, 145
+      ]
+    },
+    "Day_30": {
+      "Title": "ICE Table, Reaction Quotient, Le Châtelier’s Principle",
+      "DayNumber": 30,
+      "Unit": 4,
+      "Elements": [
+        343, 344, 345, 346, 347, 348, 351, 352, 146
+      ]
+    },
+    "Day_31": {
+      "Title": "Le Châtelier’s Principle, Equilibrium and Gibbs Free Energy",
+      "DayNumber": 31,
+      "Unit": 4,
+      "Elements": [
+        147, 148, 356
+      ]
+    },
+    "Day_32": {
+      "Title": "Gibbs Free Energy and Work, Kinetic Metastability",
+      "DayNumber": 32,
+      "Unit": 4,
+      "Elements": [
+        187, 149, 150, 188, 189, 190, 191
+      ]
+    },
+    "Day_33": {
+      "Title": "Acids and Bases",
+      "DayNumber": 33,
+      "Unit": 4,
+      "Elements": [
+        357, 152, 358, 359, 153, 360, 361, 362, 363, 364, 365
+      ]
+    },
+    "Day_34": {
+      "Title": "Acids and Bases 2",
+      "DayNumber": 34,
+      "Unit": 4,
+      "Elements": [
+        366, 154, 367, 369, 370, 155
+      ]
+    },
+    "Day_36": {
+      "Title": "Buffer Solutions",
+      "DayNumber": 36,
+      "Unit": 5,
+      "Elements": [
+        375, 376, 157, 377, 378, 379, 380
+      ]
+    },
+    "Day_37": {
+      "Title": "Acid-Base Titration",
+      "DayNumber": 37,
+      "Unit": 5,
+      "Elements": [
+        159, 381, 382, 388, 160, 384, 386
+      ]
+    },
+    "Day_38": {
+      "Title": "Oxidation-Reduction Reactions, Voltaic Cells",
+      "DayNumber": 38,
+      "Unit": 5,
+      "Elements": [
+        389, 161, 162, 163, 392, 164
+      ]
+    },
+    "Day_39": {
+      "Title": "Voltaic Cells, Half-Cell Potentials",
+      "DayNumber": 39,
+      "Unit": 5,
+      "Elements": [
+        165, 393, 166, 167
+      ]
+    },
+    "Day_40": {
+      "Title": "Thermodynamic Properties of Voltaic and Electrolytic Cells",
+      "DayNumber": 40,
+      "Unit": 5,
+      "Elements": [
+        394, 168, 395, 396
+      ]
+    },
+    "Day_41": {
+      "Title": "Batteries",
+      "DayNumber": 41,
+      "Unit": 5,
+      "Elements": [
+        169, 170
+      ]
     }
   }
 }
