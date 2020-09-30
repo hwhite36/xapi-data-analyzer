@@ -99,8 +99,10 @@ def main():
                     plt.show()
 
                 if event == "Student Duration Graph":
-                    plt.plot(df_students["Durations"], np.zeros_like(df_students["Durations"]), "x")  # TODO make this a histogram
+                    df_students.hist()
                     plt.xlabel("Duration (min)")
+                    plt.ylabel("Number of Students")
+                    plt.title("Student Durations")
                     plt.show()
 
             graphs_window.close()
