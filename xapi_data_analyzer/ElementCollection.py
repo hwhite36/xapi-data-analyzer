@@ -45,8 +45,8 @@ class ElementCollection:
         """
         interacted_dict = {k: [] for k in self.id_list}
         for index, row in self.data.iterrows():
-            if not (row["Name"] in interacted_dict[row["object name?"]]):
-                interacted_dict[row["object name?"]].append(row["Name"])
+            if not (row["Email"] in interacted_dict[row["object name?"]]):
+                interacted_dict[row["object name?"]].append(row["Email"])
 
         return interacted_dict
 
@@ -102,7 +102,7 @@ class ElementCollection:
         durations = {}
         delta_max = datetime.timedelta(minutes=10)
         for student in self.class_list:
-            student_df = self.data[self.data['Name'] == student].reset_index()
+            student_df = self.data[self.data['Email'] == student].reset_index()
             duration = datetime.timedelta()
             for index in range(0, len(student_df) - 1):
                 delta = student_df.iloc[index]['Date_Time'] - student_df.iloc[index + 1]['Date_Time']
