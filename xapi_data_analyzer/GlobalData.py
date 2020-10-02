@@ -23,8 +23,8 @@ def set_data_vars(data_path):
 
     # Parse the actual object ID from the "object id" column
     url_list = raw_data["object id"].to_list()
-    id_list = [s[s.index("id=") + 3: len(s) if s.find("?", s.index("id=")) == -1 else s.find("?", s.index("id="))] for
-               s in url_list]
+    id_list = [int(s[s.index("id=") + 3: len(s) if s.find("?", s.index("id=")) == -1 else s.find("?", s.index("id="))])
+               for s in url_list]
     raw_data["object id"] = id_list
 
     class_list = set(raw_data["Email"])
