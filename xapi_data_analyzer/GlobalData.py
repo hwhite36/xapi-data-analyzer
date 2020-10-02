@@ -13,7 +13,7 @@ def set_data_vars(data_path):
     raw_data = raw_data[["Email", "Verb", "object id", "Question/Slide", "Timestamp", "Duration"]]
 
     # Drop data that doesn't have an email associated with it
-    raw_data = raw_data.dropna(subset=["Email"])
+    raw_data = raw_data.dropbna(suset=["Email"])
 
     # Drop all "consumed" verbs b/c they seem to be pretty useless
     raw_data = raw_data[raw_data["Verb"] != 'consumed']

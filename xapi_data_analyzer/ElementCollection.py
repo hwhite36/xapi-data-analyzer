@@ -10,7 +10,7 @@ class ElementCollection:
     - the H5P element name
     - A list of students who interacted with the element
     - The percent of the class that interacted with the element
-    - The average time spent on the element
+    - The time spent on the element
     """
 
     def __init__(self, id_list, data, class_list):
@@ -66,32 +66,6 @@ class ElementCollection:
 
         return percent_interacted_dict
 
-    def get_duration(self):
-        """
-        Calculates approximate time spent.
-
-        This looks in the "duration" column of the raw data and calculates the average of any values there for each
-        element. Not perfect, but if the data in the duration column is actually representative of time taken,
-        it should give a ballpark number.
-
-        :param: none
-        :return: a dict with keys = H5P ID and values = average time spent
-        """
-        duration_dict = {k: [] for k in self.id_list}
-        for index, row in self.data.iterrows():
-            if pd.notna(row["Duration"]):
-                duration_dict[row["object name?"]].append(row["Duration"])
-
-        average_duration_dict = dict.fromkeys(self.id_list)
-        for key in duration_dict:
-            num_elements = len(duration_dict[key])
-            try:
-                average_duration_dict[key] = sum(duration_dict[key]) / num_elements
-            except ZeroDivisionError:
-                average_duration_dict[key] = "N/A"
-
-        return average_duration_dict
-
     def get_students_duration(self):
         """
         Calculates each student's time spent on the range of
@@ -125,5 +99,4 @@ class ElementCollection:
         df["List of users who interacted"] = interacted_dict_values
         df["Number of users who interacted"] = [len(val) for val in interacted_dict_values]
         df["% of users who interacted"] = self.get_percent_interacted().values()
-        df["Average duration (sec)"] = self.get_duration().values()
         return df
