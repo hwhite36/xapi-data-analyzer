@@ -15,7 +15,9 @@ class ElementCollection:
 
     def __init__(self, id_list, data, class_list):
         self.id_list = id_list
-        self.data = data[data["object name?"].isin(self.id_list)]  # Now data can be trimmed
+        self.data = data[data["object name?"].isin(id_list)]  # Now data can be trimmed
+        # Remove missing ids from the table
+        self.id_list = list(self.data['object name?'].unique())
         self.class_list = class_list
         self.class_size = len(class_list)
 
@@ -44,6 +46,7 @@ class ElementCollection:
         :return: a dict with keys = H5P ID and values = lists of users who interacted
         """
         interacted_dict = {k: [] for k in self.id_list}
+        print(interacted_dict)
         for index, row in self.data.iterrows():
             if not (row["Email"] in interacted_dict[row["object name?"]]):
                 interacted_dict[row["object name?"]].append(row["Email"])
@@ -120,7 +123,7 @@ class ElementCollection:
         """
         df = pd.DataFrame(index=self.id_list)
         df["object name?"] = self.id_list
-        df["Element Name"] = self.get_question_name_dict().values()
+        #df["Element Name"] = self.get_question_name_dict().values()
         interacted_dict_values = self.get_interacted_dict().values()
         df["List of users who interacted"] = interacted_dict_values
         df["Number of users who interacted"] = [len(val) for val in interacted_dict_values]

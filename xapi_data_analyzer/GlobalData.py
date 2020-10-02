@@ -12,6 +12,7 @@ def set_data_vars(data_path):
     global class_list
     global DayInfo
     raw_data = pd.read_csv(data_path, parse_dates=[['Date', 'Time']])
+    # raw_data = pd.read_csv(data_path)
     raw_data = raw_data.dropna(subset=["Email"])
     # We drop all "consumed" verbs here b/c they seem to be pretty useless
     raw_data = raw_data[raw_data["Verb"] != 'consumed']
@@ -20,7 +21,8 @@ def set_data_vars(data_path):
 
     # import data in DayElement.json
     try:
-        DayInfo = json.load('DayElement.json')
+        with open('DayElement.json') as f:
+            DayInfo = json.load(f)
 
     except json.JSONDecodeError:
         sg.Popup("ERROR: DayElement.json could could not be read", title="Error")
