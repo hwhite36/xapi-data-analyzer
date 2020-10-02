@@ -48,7 +48,6 @@ def use_json():
     timestamp = datetime.now(pytz.timezone("America/Chicago"))
 
     for day in days.values():
-        print(day)
         day_num = day['DayNumber']
         day_ids = day['Elements']
 
@@ -56,7 +55,7 @@ def use_json():
         element_collection.get_dataframe().to_csv("Day" + str(day_num) + "_" + str(timestamp) + ".csv")
 
         df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
-        #df_students.to_csv("StudentDurations_Day" + str(day_num) + str(timestamp) + ".csv")
+        df_students.to_csv("StudentDurations_Day" + str(day_num) + str(timestamp) + ".csv")
 
 def main():
     sg.theme("SystemDefault")
