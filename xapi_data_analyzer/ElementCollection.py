@@ -79,7 +79,7 @@ class ElementCollection:
             student_df = self.data[self.data['Email'] == student].reset_index()
             duration = datetime.timedelta()
             for index in range(0, len(student_df) - 1):
-                delta = student_df.iloc[index]['Date_Time'] - student_df.iloc[index + 1]['Date_Time']
+                delta = student_df.iloc[index]['Timestamp'] - student_df.iloc[index + 1]['Timestamp']
                 if delta < delta_max:
                     duration += delta
                 durations[student] = duration.total_seconds() / 60
