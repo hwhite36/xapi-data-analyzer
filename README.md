@@ -1,10 +1,10 @@
 # xapi-data-analyzer
-This package was originally created by Walt Boettge and Harrison White, working under Dr. John Moore at the University 
+This program was originally created by Walt Boettge and Harrison White, working under Dr. John Moore at the University 
 of Wisconsin-Madison Department of Chemistry.
 
 It was created with the goal of parsing and analyzing xAPI data created from H5P elements embedded within the CHEM 109 
 Pressbooks online textbook. The program relies on the data being present as an exported .csv file from the UW-Madison 
-Learning Locker, and cleaned with DoIT's cleaning script.
+Learning Locker (in the raw format).
 
 
 ## Installation

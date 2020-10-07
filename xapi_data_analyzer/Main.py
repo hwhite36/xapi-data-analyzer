@@ -4,6 +4,7 @@ import pandas as pd
 import PySimpleGUI as sg
 from datetime import datetime
 import pytz
+import matplotlib.pyplot as plt
 
 
 def create_main_window():
@@ -25,9 +26,16 @@ def create_main_window():
 def use_id_list(id_list):
     try:
         # Generate a CST timestamp + ElementCollection object
-        timestamp = datetime.now(pytz.timezone("America/Chicago"))
+        timestamp = str(datetime.now(pytz.timezone("America/Chicago")))
         element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list)
-        element_collection.get_dataframe().to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
+
+        # Make the timestamp a little prettier
+        timestamp = timestamp.replace(" ", "_")
+        timestamp = timestamp.replace(":", "-")
+        timestamp = timestamp[:timestamp.rindex(".")]
+
+        elements_df = element_collection.get_dataframe()
+        element_collection.to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
 
         df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
         df_students.to_csv("StudentDurations_" + str(timestamp) + ".csv")
@@ -43,6 +51,36 @@ def use_id_list(id_list):
         sg.Popup("ERROR: The items entered in the H5P ID list were not valid integers! Please try again.",
                  title="Error")
 
+    # Generate graphs window
+    graphs_window = create_graphs_window()
+    while True:
+        event, values = graphs_window.read()
+
+        if event is None:
+            break
+
+        if event == "Student % Interacted Graph":
+            elements_df.plot(x="object id", y="% of users who interacted", kind="bar")
+            plt.xlabel("H5P ID")
+            plt.ylabel("Percent")
+            plt.ylim(0, 100)
+            plt.show()
+
+        if event == "Student Count Interacted Graph":
+            elements_df.plot(x="object id", y="Number of users who interacted", kind="bar")
+            plt.xlabel("H5P ID")
+            plt.ylim(0, len(GlobalData.class_list))
+            plt.show()
+
+        if event == "Student Duration Graph":
+            df_students.hist()
+            plt.xlabel("Duration (min)")
+            plt.ylabel("Number of Students")
+            plt.title("Student Durations")
+            plt.show()
+
+    graphs_window.close()
+
 def use_json():
     days = GlobalData.DayInfo['Days']
     timestamp = datetime.now(pytz.timezone("America/Chicago"))
@@ -56,6 +94,19 @@ def use_json():
 
         df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
         df_students.to_csv("StudentDurations_Day" + str(day_num) + str(timestamp) + ".csv")
+
+def create_graphs_window():
+    layout = [
+        [sg.Text("Generate Graphs", font="Any 15 bold")],
+        [sg.Text("All files have been successfully saved into the current directory!")],
+        [sg.Text("If you would like, you can generate some graphs now, or use the files to make your own.")],
+        [sg.Text("Generate:")],
+        [sg.Button("Student % Interacted Graph", button_color=("white", "green"), size=(30, 1))],
+        [sg.Button("Student Count Interacted Graph", button_color=("white", "green"), size=(30, 1))],
+        [sg.Button("Student Duration Graph", button_color=("white", "green"), size=(30, 1))]
+    ]
+    return sg.Window("Generate Graphs", layout, element_justification="center")
+
 
 def main():
     sg.theme("SystemDefault")
@@ -84,6 +135,5 @@ def main():
                 use_json()
 
     main_window.close()
-
 
 main()
