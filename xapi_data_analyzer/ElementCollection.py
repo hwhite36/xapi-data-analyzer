@@ -50,6 +50,7 @@ class ElementCollection:
 
         return interacted_dict
 
+
     def get_percent_interacted(self):
         """
         Iterates over the dictionary returned by get_interacted_dict to calculate the percent of users who interacted
