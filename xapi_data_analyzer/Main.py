@@ -90,14 +90,14 @@ def main():
                     break
 
                 if event == "Student % Interacted Graph":
-                    elements_df.plot(x="object name?", y="% of users who interacted", kind="bar")
+                    elements_df.plot(x="object id", y="% of users who interacted", kind="bar")
                     plt.xlabel("H5P ID")
                     plt.ylabel("Percent")
                     plt.ylim(0, 100)
                     plt.show()
 
                 if event == "Student Count Interacted Graph":
-                    elements_df.plot(x="object name?", y="Number of users who interacted", kind="bar")
+                    elements_df.plot(x="object id", y="Number of users who interacted", kind="bar")
                     plt.xlabel("H5P ID")
                     plt.ylim(0, len(GlobalData.class_list))
                     plt.show()
