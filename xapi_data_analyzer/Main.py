@@ -35,7 +35,7 @@ def use_id_list(id_list):
         timestamp = timestamp[:timestamp.rindex(".")]
 
         elements_df = element_collection.get_dataframe()
-        element_collection.to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
+        elements_df.to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
 
         df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
         df_students.to_csv("StudentDurations_" + str(timestamp) + ".csv")
