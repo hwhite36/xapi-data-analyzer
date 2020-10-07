@@ -15,6 +15,7 @@ def create_main_window():
         [sg.FileBrowse(key="FILEIN")],
         [sg.Text("Next, please enter a comma-separated list of the H5P element ID numbers you would like to be "
                  "included in the box below.")],
+        [sg.Text("If the field is left blank, all data will be analyzed and organized based on Day")],
         [sg.InputText(size=(20, 1), key="IDLIST")],
         [sg.Text("Two files will be saved to the current directory:")],
         [sg.Text("xAPI-Data-Analyzer_$TIMESTAMP.csv and StudentDurations_$TIMESTAMP.csv", font="Any 10 bold")],
