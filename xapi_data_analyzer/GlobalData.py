@@ -9,11 +9,14 @@ DayInfo = None
 
 def set_data_vars(data_path, json_path):
     """
-    TODO fill in
+    Sets global data variables to be used in ``ElementCollection.py`` and ``Main.py``, including
 
-    :param data_path:
-    :param json_path:
-    :return:
+    * raw_data: the dataframe read from the raw data's csv
+    * class_list: list of unique emails from raw_data (we assume this is acceptable as a list of everyone in the class)
+    * DayInfo: the JSON data imported into the program, if the user uses a JSON input
+
+    :param data_path: path to the raw_data csv
+    :param json_path: path to the JSON file, or -1 if the user isn't using a JSON file to provide H5P IDs
     """
     global raw_data
     global class_list

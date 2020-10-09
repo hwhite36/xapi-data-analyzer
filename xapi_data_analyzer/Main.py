@@ -39,7 +39,7 @@ def use_id_list(id_list, timestamp):
     a JSON file that lists all IDs.
 
     :param id_list: the list of H5P IDs
-    :param timestamp: timestamp string, for file-naming purposes
+    :param timestamp: timestamp string for file-naming purposes
     """
     # Create folder we want to save everything to
     save_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
@@ -62,10 +62,10 @@ def use_id_list(id_list, timestamp):
 
 def use_json(timestamp):
     """
-    TODO fill in
+    Controls dataframe creation if the user provides a JSON file. Creates a dataframe and graphs for every day that has
+    data, and outputs it into a day-specific folder within the base folder.
 
-    :param timestamp:
-    :return:
+    :param timestamp: timestamp string for file-naming purposes
     """
     days = GlobalData.DayInfo['Days']
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
@@ -87,7 +87,7 @@ def use_json(timestamp):
             day_df = element_collection.get_dataframe()
             day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
 
-            # Same story but for student durations
+            # create student durations dataframe
             df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
             df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
 
@@ -97,12 +97,15 @@ def use_json(timestamp):
 
 def generate_graphs(element_df, duration_df, folder):
     """
-    TODO fill in
+    Creates graphs of the following, and saves them as a png in ``folder``:
 
-    :param element_df:
-    :param duration_df:
-    :param folder:
-    :return:
+    * % of students who interacted with each given element
+    * # of students who interacted with each given element
+    * Histogram of the durations that students spent on all elements in ``element_df``
+
+    :param element_df: dataframe for an ElementCollection object
+    :param duration_df: dataframe containing students' durations for the same ElementCollection object
+    :param folder: Path object of the folder to save the graphs in
     """
     # Generate student % interacted graph, save to png
     element_df.plot(x="object id", y="% of users who interacted", kind="bar")
@@ -132,9 +135,9 @@ def generate_graphs(element_df, duration_df, folder):
 
 def generate_timestamp():
     """
-    TODO fill in
+    Generates a timestamp string for the current time in CST to be used for file-naming.
 
-    :return:
+    :return: a nicely-formatted string of the timestamp
     """
     # Generate a CST timestamp
     timestamp = str(datetime.now(pytz.timezone("America/Chicago")))
