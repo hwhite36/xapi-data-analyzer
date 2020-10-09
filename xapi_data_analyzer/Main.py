@@ -9,11 +9,11 @@ from pathlib import Path
 import os
 
 
-def create_main_window():  # TODO add browse button for json file, add more text describing options
+def create_main_window():
     """
-    TODO fill in
+    Creates the main window layout.
 
-    :return:
+    :return: a PySimpleGUI Window object for the main window
     """
     layout = [
         [sg.Text("UW-Madison xAPI Data Analyzer", font="Any 15 bold")],
@@ -21,7 +21,7 @@ def create_main_window():  # TODO add browse button for json file, add more text
                  "(usually called something like dataMM-DD-YY.csv)")],
         [sg.FileBrowse(key="FILEIN")],
         [sg.Text("If you would like the data to be automatically organized by Day (recommended), please select "
-                 "the DayElement.json file")],
+                 "the DayElement.json file:")],
         [sg.FileBrowse(key="JSONIN")],
         [sg.Text("Or, if you know the exact H5P elements you want data on, please enter a comma-separated list of "
                  "their ID numbers in the box below (leave blank if using the JSON file).")],
@@ -35,11 +35,11 @@ def create_main_window():  # TODO add browse button for json file, add more text
 
 def use_id_list(id_list, timestamp):
     """
-    TODO Fill in
+    Controls dataframe creation and data-saving if the user chooses to enter a list of H5P IDs, as opposed to providing
+    a JSON file that lists all IDs.
 
-    :param id_list:
-    :param timestamp:
-    :return:
+    :param id_list: the list of H5P IDs
+    :param timestamp: timestamp string, for file-naming purposes
     """
     # Create folder we want to save everything to
     save_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
@@ -111,6 +111,7 @@ def generate_graphs(element_df, duration_df, folder):
     plt.ylim(0, 100)
     plt.title("Students % Interacted")
     plt.savefig(folder / "student_percent_interacted.png")
+    plt.close()
 
     # Generate student count interacted graph, save to png
     element_df.plot(x="object id", y="Number of users who interacted", kind="bar")
@@ -118,6 +119,7 @@ def generate_graphs(element_df, duration_df, folder):
     plt.ylim(0, len(GlobalData.class_list))
     plt.title("Student Interacted Count")
     plt.savefig(folder / "student_count_interacted.png")
+    plt.close()
 
     # Generate student duration histogram, save to png
     duration_df.hist()
@@ -125,6 +127,7 @@ def generate_graphs(element_df, duration_df, folder):
     plt.ylabel("Number of Students")
     plt.title("Student Durations")
     plt.savefig(folder / "student_durations.png")
+    plt.close()
 
 
 def generate_timestamp():
