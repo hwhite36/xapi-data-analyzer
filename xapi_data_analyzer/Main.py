@@ -5,16 +5,26 @@ import PySimpleGUI as sg
 from datetime import datetime
 import pytz
 import matplotlib.pyplot as plt
+from pathlib import Path
+import os
 
 
-def create_main_window():
+def create_main_window():  # TODO add browse button for json file, add more text describing options
+    """
+    TODO fill in
+
+    :return:
+    """
     layout = [
         [sg.Text("UW-Madison xAPI Data Analyzer", font="Any 15 bold")],
-        [sg.Text("Please select the cleaned xAPI data .csv file from the DoIT Learning Locker "
-                 "(usually called dataMM-DD-YY(cleaned).csv)")],
+        [sg.Text("Please select the xAPI data .csv file from the DoIT Learning Locker "
+                 "(usually called something like dataMM-DD-YY.csv)")],
         [sg.FileBrowse(key="FILEIN")],
-        [sg.Text("Next, please enter a comma-separated list of the H5P element ID numbers you would like to be "
-                 "included in the box below.")],
+        [sg.Text("If you would like the data to be automatically organized by Day (recommended), please select "
+                 "the DayElement.json file")],
+        [sg.FileBrowse(key="JSONIN")],
+        [sg.Text("Or, if you know the exact H5P elements you want data on, please enter a comma-separated list of "
+                 "their ID numbers in the box below (leave blank if using the JSON file).")],
         [sg.InputText(size=(20, 1), key="IDLIST")],
         [sg.Text("Two files will be saved to the current directory:")],
         [sg.Text("xAPI-Data-Analyzer_$TIMESTAMP.csv and StudentDurations_$TIMESTAMP.csv", font="Any 10 bold")],
@@ -23,89 +33,111 @@ def create_main_window():
     return sg.Window("xAPI Data Analyzer", layout, element_justification="center")
 
 
-def use_id_list(id_list):
-    try:
-        # Generate a CST timestamp + ElementCollection object
-        timestamp = str(datetime.now(pytz.timezone("America/Chicago")))
-        element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list)
+def use_id_list(id_list, timestamp):
+    """
+    TODO Fill in
 
-        # Make the timestamp a little prettier
-        timestamp = timestamp.replace(" ", "_")
-        timestamp = timestamp.replace(":", "-")
-        timestamp = timestamp[:timestamp.rindex(".")]
+    :param id_list:
+    :param timestamp:
+    :return:
+    """
+    # Create folder we want to save everything to
+    save_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
+    os.mkdir(save_folder)
 
-        elements_df = element_collection.get_dataframe()
-        elements_df.to_csv("xAPI-Data-Analyzer_" + str(timestamp) + ".csv")
+    # Create ElementCollection object + dataframe
+    element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list)
+    elements_df = element_collection.get_dataframe()
+    elements_df.to_csv(save_folder / "ElementCollection.csv")
 
-        df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
-        df_students.to_csv("StudentDurations_" + str(timestamp) + ".csv")
+    # create student durations dataframe
+    df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
+    df_students.to_csv(save_folder / "StudentDurations.csv")
 
-        sg.Popup("All files successfully saved!", title="Success!")
+    # Generate graphs
+    generate_graphs(elements_df, df_students, save_folder)
 
-    except KeyError as e:
-        sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
-    except FileNotFoundError:
-        sg.Popup("ERROR: Data file not found! Please double-check the path to the data file and try again.",
-                 title="Error")
-    except ValueError:
-        sg.Popup("ERROR: The items entered in the H5P ID list were not valid integers! Please try again.",
-                 title="Error")
+    sg.Popup("All files successfully saved!", title="Success!")
 
-    # Generate graphs window
-    graphs_window = create_graphs_window()
-    while True:
-        event, values = graphs_window.read()
 
-        if event is None:
-            break
+def use_json(timestamp):
+    """
+    TODO fill in
 
-        if event == "Student % Interacted Graph":
-            elements_df.plot(x="object id", y="% of users who interacted", kind="bar")
-            plt.xlabel("H5P ID")
-            plt.ylabel("Percent")
-            plt.ylim(0, 100)
-            plt.show()
-
-        if event == "Student Count Interacted Graph":
-            elements_df.plot(x="object id", y="Number of users who interacted", kind="bar")
-            plt.xlabel("H5P ID")
-            plt.ylim(0, len(GlobalData.class_list))
-            plt.show()
-
-        if event == "Student Duration Graph":
-            df_students.hist()
-            plt.xlabel("Duration (min)")
-            plt.ylabel("Number of Students")
-            plt.title("Student Durations")
-            plt.show()
-
-    graphs_window.close()
-
-def use_json():
+    :param timestamp:
+    :return:
+    """
     days = GlobalData.DayInfo['Days']
-    timestamp = datetime.now(pytz.timezone("America/Chicago"))
+    base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
+    os.mkdir(base_folder)
 
     for day in days.values():
+        # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
 
+        # Create where we want to store the csvs and graphs
+        day_folder = base_folder / ("Day" + str(day_num))
+        os.mkdir(day_folder)
+
+        # Create ElementCollection object and dataframe
         element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list)
-        element_collection.get_dataframe().to_csv("Day" + str(day_num) + "_" + str(timestamp) + ".csv")
+        day_df = element_collection.get_dataframe()
+        day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
 
+        # create student durations dataframe
         df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
-        df_students.to_csv("StudentDurations_Day" + str(day_num) + str(timestamp) + ".csv")
+        df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
 
-def create_graphs_window():
-    layout = [
-        [sg.Text("Generate Graphs", font="Any 15 bold")],
-        [sg.Text("All files have been successfully saved into the current directory!")],
-        [sg.Text("If you would like, you can generate some graphs now, or use the files to make your own.")],
-        [sg.Text("Generate:")],
-        [sg.Button("Student % Interacted Graph", button_color=("white", "green"), size=(30, 1))],
-        [sg.Button("Student Count Interacted Graph", button_color=("white", "green"), size=(30, 1))],
-        [sg.Button("Student Duration Graph", button_color=("white", "green"), size=(30, 1))]
-    ]
-    return sg.Window("Generate Graphs", layout, element_justification="center")
+        # Generate and save graphs
+        generate_graphs(day_df, df_students, day_folder)
+
+
+def generate_graphs(element_df, duration_df, folder):
+    """
+    TODO fill in
+
+    :param element_df:
+    :param duration_df:
+    :param folder:
+    :return:
+    """
+    # Generate student % interacted graph, save to png
+    element_df.plot(x="object id", y="% of users who interacted", kind="bar")
+    plt.xlabel("H5P ID")
+    plt.ylabel("Percent")
+    plt.ylim(0, 100)
+    plt.title("Students % Interacted")
+    plt.savefig(folder / "student_percent_interacted.png")
+
+    # Generate student count interacted graph, save to png
+    element_df.plot(x="object id", y="Number of users who interacted", kind="bar")
+    plt.xlabel("H5P ID")
+    plt.ylim(0, len(GlobalData.class_list))
+    plt.title("Student Interacted Count")
+    plt.savefig(folder / "student_count_interacted.png")
+
+    # Generate student duration histogram, save to png
+    duration_df.hist()
+    plt.xlabel("Duration (min)")
+    plt.ylabel("Number of Students")
+    plt.title("Student Durations")
+    plt.savefig(folder / "student_durations.png")
+
+
+def generate_timestamp():
+    """
+    TODO fill in
+
+    :return:
+    """
+    # Generate a CST timestamp
+    timestamp = str(datetime.now(pytz.timezone("America/Chicago")))
+    # Make the string a little prettier
+    timestamp = timestamp.replace(" ", "_")
+    timestamp = timestamp.replace(":", "-")
+    timestamp = timestamp[:timestamp.rindex(".")]
+    return timestamp
 
 
 def main():
@@ -119,21 +151,38 @@ def main():
             break
 
         if event == "Go":
-            try:
-                GlobalData.set_data_vars(values["FILEIN"])
-            except KeyError as e:
-                sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
-
             # Parse the ID list
             id_list = values["IDLIST"]
 
+            try:
+                if id_list:  # Pass -1 as the json path so GlobalData doesn't try parsing it
+                    GlobalData.set_data_vars(values["FILEIN"], -1)
+                else:
+                    GlobalData.set_data_vars(values["FILEIN"], values["JSONIN"])
+            except KeyError as e:
+                sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
+                continue
+            except FileNotFoundError:
+                sg.Popup("ERROR: Data file not found! Please double-check the path to the data file and try again.",
+                         title="Error")
+                continue
+
+            # Generate a timestamp for naming the files
+            timestamp = generate_timestamp()
+
             # If the user entered IDs, use those. Otherwise, use the json data
             if id_list:
-                id_list = [int(item.strip()) for item in id_list.split(",")]
-                use_id_list(id_list)
+                try:
+                    id_list = [int(item.strip()) for item in id_list.split(",")]
+                    use_id_list(id_list, timestamp)
+                except ValueError:
+                    sg.Popup("ERROR: The items entered in the H5P ID list were not valid integers! Please try again.",
+                             title="Error")
+                    continue
             else:
-                use_json()
+                use_json(timestamp)
 
     main_window.close()
+
 
 main()
