@@ -5,6 +5,8 @@ import PySimpleGUI as sg
 from datetime import datetime
 import pytz
 import matplotlib.pyplot as plt
+from pathlib import Path
+import os
 
 
 def create_main_window():  # TODO add browse button for json file, add more text describing options
@@ -69,7 +71,7 @@ def use_id_list(id_list, timestamp):
     manage_graph_window(graphs_window, elements_df, df_students)
 
 
-def use_json(timestamp):  # TODO add prompt after each day is generated asking if the user wants to view graphs.. or auto-generate them? we could even generate the graphs (as pngs) and two csvs and put it in a day-specific folder
+def use_json(timestamp):
     """
     TODO fill in
 
@@ -77,16 +79,48 @@ def use_json(timestamp):  # TODO add prompt after each day is generated asking i
     :return:
     """
     days = GlobalData.DayInfo['Days']
+    base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
+    os.mkdir(base_folder)
 
     for day in days.values():
+        # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
 
-        element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list)
-        element_collection.get_dataframe().to_csv("Day" + str(day_num) + "_" + str(timestamp) + ".csv")
+        # Create where we want to store the csvs and graphs
+        day_folder = base_folder / ("Day" + str(day_num))
+        os.mkdir(day_folder)
 
+        # Create ElementCollection object and dataframe
+        element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list)
+        day_df = element_collection.get_dataframe()
+        day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
+
+        # Same story but for student durations
         df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
-        df_students.to_csv("StudentDurations_Day" + str(day_num) + "_" + str(timestamp) + ".csv")
+        df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
+
+        # Generate student % interacted graph, save to png
+        day_df.plot(x="object id", y="% of users who interacted", kind="bar")
+        plt.xlabel("H5P ID")
+        plt.ylabel("Percent")
+        plt.ylim(0, 100)
+        plt.title("Students % Interacted")
+        plt.savefig(day_folder / "student_percent_interacted.png")
+
+        # Generate student count interacted graph, save to png
+        day_df.plot(x="object id", y="Number of users who interacted", kind="bar")
+        plt.xlabel("H5P ID")
+        plt.ylim(0, len(GlobalData.class_list))
+        plt.title("Student Interacted Count")
+        plt.savefig(day_folder / "student_count_interacted.png")
+
+        # Generate student duration histogram, save to png
+        df_students.hist()
+        plt.xlabel("Duration (min)")
+        plt.ylabel("Number of Students")
+        plt.title("Student Durations")
+        plt.savefig(day_folder / "student_durations.png")
 
 
 def generate_timestamp():
