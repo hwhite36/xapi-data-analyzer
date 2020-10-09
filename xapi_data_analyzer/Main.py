@@ -76,21 +76,23 @@ def use_json(timestamp):
         day_num = day['DayNumber']
         day_ids = day['Elements']
 
-        # Create where we want to store the csvs and graphs
-        day_folder = base_folder / ("Day" + str(day_num))
-        os.mkdir(day_folder)
-
-        # Create ElementCollection object and dataframe
+        # Check that data for the given Day exists
         element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list)
-        day_df = element_collection.get_dataframe()
-        day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
+        if not element_collection.data.empty:
+            # Create where we want to store the csvs and graphs
+            day_folder = base_folder / ("Day" + str(day_num))
+            os.mkdir(day_folder)
 
-        # create student durations dataframe
-        df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
-        df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
+            # Create ElementCollection object and dataframe
+            day_df = element_collection.get_dataframe()
+            day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
 
-        # Generate and save graphs
-        generate_graphs(day_df, df_students, day_folder)
+            # Same story but for student durations
+            df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
+            df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
+
+            # Generate and save graphs
+            generate_graphs(day_df, df_students, day_folder)
 
 
 def generate_graphs(element_df, duration_df, folder):
