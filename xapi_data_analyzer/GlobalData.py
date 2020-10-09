@@ -7,7 +7,7 @@ class_list = None
 DayInfo = None
 
 
-def set_data_vars(data_path):
+def set_data_vars(data_path, json_path):
     global raw_data
     global class_list
     global DayInfo
@@ -39,7 +39,7 @@ def set_data_vars(data_path):
 
     # import data in DayElement.json
     try:
-        with open('DayElement.json') as f:
+        with open(json_path) as f:
             DayInfo = json.load(f)
 
     except json.JSONDecodeError:
