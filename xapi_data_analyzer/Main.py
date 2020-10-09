@@ -91,10 +91,13 @@ def use_json():
         day_ids = day['Elements']
 
         element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list)
-        element_collection.get_dataframe().to_csv("Day" + str(day_num) + "_" + str(timestamp) + ".csv")
+        elements_df = element_collection.get_dataframe()
+        if not elements_df.empty:
+            elements_df.to_csv("Day" + str(day_num) + "_" + str(timestamp) + ".csv")
 
         df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
-        df_students.to_csv("StudentDurations_Day" + str(day_num) + str(timestamp) + ".csv")
+        if not df_students.empty:
+            df_students.to_csv("StudentDurations_Day" + str(day_num) + str(timestamp) + ".csv")
 
 def create_graphs_window():
     layout = [

@@ -41,6 +41,9 @@ def set_data_vars(data_path):
     try:
         with open('DayElement.json') as f:
             DayInfo = json.load(f)
+            # Drop data from non-student emails (using the filter emails list)
+            raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
+            class_list = class_list - set(DayInfo["Filter_Emails"])
 
     except json.JSONDecodeError:
         sg.Popup("ERROR: DayElement.json could could not be read", title="Error")
