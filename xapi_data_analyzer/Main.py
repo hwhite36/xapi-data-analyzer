@@ -26,8 +26,8 @@ def create_main_window():
         [sg.Text("Or, if you know the exact H5P elements you want data on, please enter a comma-separated list of "
                  "their ID numbers in the box below (leave blank if using the JSON file).")],
         [sg.InputText(size=(20, 1), key="IDLIST")],
-        [sg.Text("Two files will be saved to the current directory:")],
-        [sg.Text("xAPI-Data-Analyzer_$TIMESTAMP.csv and StudentDurations_$TIMESTAMP.csv", font="Any 10 bold")],
+        [sg.Text("The data will be saved to the current directory under the folder 'xAPI-Data-Analyzer_$TIMESTAMP/'",
+                 font="Any 10 bold")],
         [sg.Button("Go", size=(4, 1)), sg.Exit()]
     ]
     return sg.Window("xAPI Data Analyzer", layout, element_justification="center")
