@@ -7,7 +7,14 @@ class_list = None
 DayInfo = None
 
 
-def set_data_vars(data_path):
+def set_data_vars(data_path, json_path):
+    """
+    TODO fill in
+
+    :param data_path:
+    :param json_path:
+    :return:
+    """
     global raw_data
     global class_list
     global DayInfo
@@ -38,15 +45,16 @@ def set_data_vars(data_path):
     class_list = set(raw_data["Email"])
 
     # import data in DayElement.json
-    try:
-        with open('DayElement.json') as f:
-            DayInfo = json.load(f)
-            # Drop data from non-student emails (using the filter emails list)
-            raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
-            class_list = class_list - set(DayInfo["Filter_Emails"])
+    if json_path != -1:
+        try:
+            with open(json_path) as f:
+                DayInfo = json.load(f)
+                # Drop data from non-student emails (using the filter emails list)
+                raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
+                class_list = class_list - set(DayInfo["Filter_Emails"])
 
-    except json.JSONDecodeError:
-        sg.Popup("ERROR: DayElement.json could could not be read", title="Error")
+        except json.JSONDecodeError:
+            sg.Popup("ERROR: DayElement.json could could not be read", title="Error")
 
-    except FileNotFoundError:
-        sg.Popup("ERROR: DayElement.json could could not be found", title="Error")
+        except FileNotFoundError:
+            sg.Popup("ERROR: DayElement.json could could not be found", title="Error")
