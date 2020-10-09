@@ -151,8 +151,14 @@ def main():
             break
 
         if event == "Go":
+            # Parse the ID list
+            id_list = values["IDLIST"]
+
             try:
-                GlobalData.set_data_vars(values["FILEIN"], values["JSONIN"])
+                if id_list:  # Pass -1 as the json path so GlobalData doesn't try parsing it
+                    GlobalData.set_data_vars(values["FILEIN"], -1)
+                else:
+                    GlobalData.set_data_vars(values["FILEIN"], values["JSONIN"])
             except KeyError as e:
                 sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
                 continue
@@ -160,9 +166,6 @@ def main():
                 sg.Popup("ERROR: Data file not found! Please double-check the path to the data file and try again.",
                          title="Error")
                 continue
-
-            # Parse the ID list
-            id_list = values["IDLIST"]
 
             # Generate a timestamp for naming the files
             timestamp = generate_timestamp()
