@@ -78,6 +78,8 @@ def use_json(timestamp):
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
     os.mkdir(base_folder)
 
+    students_master = pd.DataFrame(index = GlobalData.class_list)
+
     for day in days.values():
         # Get info from JSON file
         day_num = day['DayNumber']
@@ -95,12 +97,16 @@ def use_json(timestamp):
             day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
 
             # create student durations dataframe
-            df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
+            students_dict = element_collection.get_students_duration()
+            df_students = pd.DataFrame.from_dict(students_dict, orient='index')
             df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
 
+            #Update aggregated students df
+            students_master["Day" + str(day_num)] = pd.Series(students_dict)
             # Generate and save graphs
             generate_graphs(day_df, df_students, day_folder)
 
+    students_master.to_csv(base_folder / "TotalDurations.csv")
 
 def generate_graphs(element_df, duration_df, folder):
     """
