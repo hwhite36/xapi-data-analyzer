@@ -7,6 +7,7 @@ import pytz
 import matplotlib.pyplot as plt
 from pathlib import Path
 import os
+import webbrowser
 
 
 def create_main_window():
@@ -20,15 +21,21 @@ def create_main_window():
         [sg.Text("Please select the xAPI data .csv file from the DoIT Learning Locker "
                  "(usually called something like dataMM-DD-YY.csv)")],
         [sg.FileBrowse(key="FILEIN")],
+        [sg.HorizontalSeparator(color="black")],
         [sg.Text("If you would like the data to be automatically organized by Day (recommended), please select "
                  "the DayElement.json file:")],
         [sg.FileBrowse(key="JSONIN")],
-        [sg.Text("Or, if you know the exact H5P elements you want data on, please enter a comma-separated list of "
+        [sg.Text("OR", font="Any 12 bold")],
+        [sg.Text("if you know the exact H5P elements you want data on, please enter a comma-separated list of "
                  "their ID numbers in the box below (leave blank if using the JSON file).")],
         [sg.InputText(size=(20, 1), key="IDLIST")],
+        [sg.HorizontalSeparator(color="black")],
         [sg.Text("The data will be saved to the current directory under the folder 'xAPI-Data-Analyzer_$TIMESTAMP/'",
                  font="Any 10 bold")],
-        [sg.Button("Go", size=(4, 1)), sg.Exit()]
+        [sg.Button("Go", size=(4, 1), button_color=("white", "green"))],
+        [sg.HorizontalSeparator(color="black")],
+        [sg.Text("Need help or want to learn more? Check out our GitHub page for an in-depth explanation of the tool:")],
+        [sg.Text("README", font="Any 12 underline bold", text_color="blue", enable_events=True, tooltip="Follow link")]
     ]
     return sg.Window("xAPI Data Analyzer", layout, element_justification="center")
 
@@ -157,6 +164,9 @@ def main():
 
         if event in ("Exit", None):
             break
+
+        if event == "README":
+            webbrowser.open("https://github.com/HBlanco36/xapi-data-analyzer")
 
         if event == "Go":
             # Parse the ID list
