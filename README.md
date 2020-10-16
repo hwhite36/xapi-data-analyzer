@@ -41,10 +41,12 @@ and PyInstaller, so you need to have matplotlib 3.0.3 installed (`pip install ma
 ## Usage
 ### Data CSV input
 The first thing the program asks you to do is to select the .csv file containing the raw data from the DoIT Learning Locker.
-Click the top "Browse" button and select the appropriate file. 
+Click the top "Browse" button and select the appropriate file.
+
+![Browse CSV image](https://github.com/HBlanco36/xapi-data-analyzer/blob/master/images/click_go.png)
 
 If you're using the JSON input (more on that below), it's recommended that this data be cumulative from the start of the
-semester for maximum data output. __Add screenshot once GUI design finalized!__
+semester for maximum data output.
 
 #### A note on data format
 The program looks for the following columns in the spreadsheet (in any order):
