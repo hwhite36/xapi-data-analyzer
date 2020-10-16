@@ -24,13 +24,18 @@ To use the program, simply run `xapi_data_analyzer/Main.py`. The program depends
 * `pysimplegui`
 * `matplotlib`
 
+#### Creating an executable
 To create an executable, install PyInstaller (`pip install pyinstaller`) and run the following command in the same 
 directory as `Main.py`:
 
 `pyinstaller -wF Main.py`
 
-This will create a standalone executable file (for whatever operating system you run the command on) of the program -- 
-no need for the end user to have Python or any of the third-party libraries installed!
+This will create a standalone executable file named `Main` in the `dist` folder under the current directory 
+(for whatever operating system you run the command on). This allows end users to run your program without having Python 
+or any of the third-party libraries installed!
+
+Do note that PyInstaller only works with up to Python 3.7. There is also currently a bug between the latest version of matplotlib
+and PyInstaller, so you need to have matplotlib 3.0.3 installed (`pip install matplotlib==3.0.3`) to successfully create an exe.
 
 
 ## Usage
