@@ -43,8 +43,8 @@ and PyInstaller, so you need to have matplotlib 3.0.3 installed (`pip install ma
 The first thing the program asks you to do is to select the .csv file containing the raw data from the DoIT Learning Locker.
 Click the top "Browse" button and select the appropriate file.
 
-![Browse CSV image](https://github.com/HBlanco36/xapi-data-analyzer/blob/master/images/csv_click_browse.png)
-![Open CSV image](https://github.com/HBlanco36/xapi-data-analyzer/blob/master/images/csv_open_file.png)
+![Browse CSV image](images/csv_click_browse.png)
+![Open CSV image](images/csv_open_file.png)
 
 If you're using the JSON input (more on that below), it's recommended that this data be cumulative from the start of the
 semester for maximum data output.
@@ -78,18 +78,18 @@ which H5P IDs correspond to which "Days" in the CHEM 109 curriculum, so the prog
 
 If you select a JSON file, please leave the H5P ID list input blank.
 
-![Browse for JSON image](https://github.com/HBlanco36/xapi-data-analyzer/blob/master/images/json_click_browse.png)
-![Open JSON image](https://github.com/HBlanco36/xapi-data-analyzer/blob/master/images/json_open_file.png)
+![Browse for JSON image](images/json_click_browse.png)
+![Open JSON image](images/json_open_file.png)
 
 #### For advanced users: enter your own H5P ID list
 If you know the exact H5P IDs you want data on, enter their numbers as a comma-separated list into the H5P ID list input.
 
-![Enter ID list image](https://github.com/HBlanco36/xapi-data-analyzer/blob/master/images/enter_list_ids.png)
+![Enter ID list image](images/enter_list_ids.png)
 
 ### Running the tool
 After you either select the JSON file or enter your H5P IDs, press the green "Go" button to run the program.
 
-![Click Go image](https://github.com/HBlanco36/xapi-data-analyzer/blob/master/images/click_go.png)
+![Click Go image](images/click_go.png)
 
 Depending on the size of the data .csv, the tool may take a couple minutes to run.
 
@@ -100,7 +100,7 @@ directory that you executed the program. If you used the JSON input, there will 
 and each Day folder will contain a csv for the Day's data and student durations, as well as corresponding graphs saved as PNGs.
 If you input your own list, the main folder will just contain one data csv, one student durations csv, and the corresponding graphs.
 
-![Resulting folder image](https://github.com/HBlanco36/xapi-data-analyzer/blob/master/images/end_folder.png)
+![Resulting folder image](images/end_folder.png)
 
 Note: the timestamp is generated based on Central Time (US).
 
