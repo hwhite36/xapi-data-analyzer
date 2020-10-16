@@ -20,11 +20,11 @@ def create_main_window():
         [sg.Text("UW-Madison xAPI Data Analyzer", font="Any 15 bold")],
         [sg.Text("Please select the xAPI data .csv file from the DoIT Learning Locker "
                  "(usually called something like dataMM-DD-YY.csv)")],
-        [sg.FileBrowse(key="FILEIN")],
+        [sg.In(), sg.FileBrowse(key="FILEIN")],
         [sg.HorizontalSeparator(color="black")],
         [sg.Text("If you would like the data to be automatically organized by Day (recommended), please select "
                  "the DayElement.json file:")],
-        [sg.FileBrowse(key="JSONIN")],
+        [sg.In(), sg.FileBrowse(key="JSONIN")],
         [sg.Text("OR", font="Any 12 bold")],
         [sg.Text("if you know the exact H5P elements you want data on, please enter a comma-separated list of "
                  "their ID numbers in the box below (leave blank if using the JSON file).")],
