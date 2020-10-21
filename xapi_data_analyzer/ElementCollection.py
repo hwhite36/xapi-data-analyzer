@@ -19,6 +19,19 @@ class ElementCollection:
         self.class_list = class_list
         self.class_size = len(class_list)
 
+        # Below are vars that are expensive time-wise to calculate, so we make em instance vars and calculate only once
+        self.question_name_dict = None
+        self.interacted_dict = None
+
+    def set_expensive_instance_vars(self):
+        """
+        This function is meant to be called ONLY ONCE per class instance. It condenses down expensive operations so we
+        only need to run them once. All variables that depend on these expensive operations are defined as instance
+        variables, rather than a local variable returned by the function. This is so they can be accessed without
+        re-calling the expensive function.
+        """
+        pass
+
     def get_question_name_dict(self):
         """
         Iterates over the raw data. If "Question/Slide" for a row is populated, it adds it to a dictionary.
