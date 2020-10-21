@@ -119,7 +119,7 @@ def use_json(timestamp):
 
     # Rearrange columns
     cols = list(students_master.columns)
-    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4']
+    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4', 'Unit5']
     for unit in units:
         cols.append(cols.pop(cols.index(unit)))
     students_master = students_master[cols]
