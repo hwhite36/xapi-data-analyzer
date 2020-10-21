@@ -78,9 +78,9 @@ def use_json(timestamp):
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
     os.mkdir(base_folder)
 
-    students_master = pd.DataFrame(index = GlobalData.class_list)
+    students_master = pd.DataFrame(index=GlobalData.class_list)
 
-    for day in list(days.values())[::3]:
+    for day in days.values():
         # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
