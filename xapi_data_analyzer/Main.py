@@ -108,7 +108,7 @@ def use_json(timestamp):
                     text_file.write("No student durations data to report for Day " + str(day_num) +
                                     ". Because of this, the student durations CSV and histogram were not generated.")
 
-            #Update aggregated students df
+            # Update aggregated students df
             students_master["Day" + str(day_num)] = pd.Series(students_dict)
             if unit_name in students_master.columns:
                 students_master[unit_name].add(pd.Series(students_dict))
@@ -118,15 +118,17 @@ def use_json(timestamp):
             # Generate and save graphs
             generate_graphs(day_df, df_students, day_folder)
 
+    # Finish processing students_master
     # Rearrange columns
     cols = list(students_master.columns)
-    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4', 'Unit5']
+    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4', 'Unit5']  # FIXME can we do this not hard-coded? From JSON maybe?
     for unit in units:
         cols.append(cols.pop(cols.index(unit)))
     students_master = students_master[cols]
     # Compute a totals column
     students_master['Total'] = students_master[units].sum(axis=1)
     students_master.to_csv(base_folder / "TotalDurations.csv")
+
 
 def generate_graphs(element_df, duration_df, folder):
     """
