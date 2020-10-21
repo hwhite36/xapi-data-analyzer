@@ -6,6 +6,7 @@ venv
 
 # Data
 *.csv
+/xapi_data_analyzer/xAPI-Data-Analyzer_*
 
 # Compiled python modules
 *.pyc
