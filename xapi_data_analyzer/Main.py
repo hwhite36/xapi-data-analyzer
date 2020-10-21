@@ -84,6 +84,7 @@ def use_json(timestamp):
         # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
+        unit_name = "Unit" + str(day['Unit'])
 
         # Check that data for the given Day exists
         element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list)
@@ -103,9 +104,22 @@ def use_json(timestamp):
 
             #Update aggregated students df
             students_master["Day" + str(day_num)] = pd.Series(students_dict)
+            if unit_name in students_master.columns:
+                students_master[unit_name].add(pd.Series(students_dict))
+            else:
+                students_master[unit_name] = pd.Series(students_dict)
+
             # Generate and save graphs
             generate_graphs(day_df, df_students, day_folder)
 
+    # Rearrange columns
+    cols = students_master.columns
+    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4', 'Unit5']
+    for unit in units:
+        cols.append(cols.pop(cols.index(unit)))
+    students_master = students_master[[cols]]
+    # Compute a totals column
+    students_master.assign(total= lambda x: x.Unit1 + x.Unit2 + x.Unit3 + x.Unit4 + x.Unit5)
     students_master.to_csv(base_folder / "TotalDurations.csv")
 
 def generate_graphs(element_df, duration_df, folder):
