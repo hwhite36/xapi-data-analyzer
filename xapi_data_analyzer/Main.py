@@ -78,11 +78,14 @@ def use_json(timestamp):
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
     os.mkdir(base_folder)
 
+    students_master = pd.DataFrame(index=GlobalData.class_list)
+
     for i, day in enumerate(days.values(), 1):
         sg.OneLineProgressMeter("Progress", i, len(days.values()), orientation="h")
         # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
+        unit_name = "Unit" + str(day['Unit'])
 
         # Check that data for the given Day exists
         element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list)
@@ -96,7 +99,8 @@ def use_json(timestamp):
             day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
 
             # create student durations dataframe
-            df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
+            students_dict = element_collection.get_students_duration()
+            df_students = pd.DataFrame.from_dict(students_dict, orient='index')
             if not df_students.empty:
                 df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
             else:
@@ -104,9 +108,25 @@ def use_json(timestamp):
                     text_file.write("No student durations data to report for Day " + str(day_num) +
                                     ". Because of this, the student durations CSV and histogram were not generated.")
 
+            #Update aggregated students df
+            students_master["Day" + str(day_num)] = pd.Series(students_dict)
+            if unit_name in students_master.columns:
+                students_master[unit_name].add(pd.Series(students_dict))
+            else:
+                students_master[unit_name] = pd.Series(students_dict)
+
             # Generate and save graphs
             generate_graphs(day_df, df_students, day_folder)
 
+    # Rearrange columns
+    cols = list(students_master.columns)
+    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4', 'Unit5']
+    for unit in units:
+        cols.append(cols.pop(cols.index(unit)))
+    students_master = students_master[cols]
+    # Compute a totals column
+    students_master['Total'] = students_master[units].sum(axis=1)
+    students_master.to_csv(base_folder / "TotalDurations.csv")
 
 def generate_graphs(element_df, duration_df, folder):
     """
