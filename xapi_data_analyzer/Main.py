@@ -64,7 +64,7 @@ def use_id_list(id_list, timestamp):
     # Generate graphs
     generate_graphs(elements_df, df_students, save_folder)
 
-    sg.Popup("All files successfully saved!", title="Success!")
+    sg.Popup("All files successfully saved!", title="Success!")  # FIXME this is inconsistent with json method, which has no popup
 
 
 def use_json(timestamp):
@@ -96,7 +96,12 @@ def use_json(timestamp):
 
             # create student durations dataframe
             df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
-            df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
+            if not df_students.empty:
+                df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
+            else:
+                with open(day_folder / ("StudentDurations_Day" + str(day_num) + ".txt"), "w") as text_file:
+                    text_file.write("No student durations data to report for Day " + str(day_num) +
+                                    ". Because of this, the student durations CSV and histogram were not generated.")
 
             # Generate and save graphs
             generate_graphs(day_df, df_students, day_folder)
@@ -132,12 +137,13 @@ def generate_graphs(element_df, duration_df, folder):
     plt.close()
 
     # Generate student duration histogram, save to png
-    duration_df.hist()
-    plt.xlabel("Duration (min)")
-    plt.ylabel("Number of Students")
-    plt.title("Student Durations")
-    plt.savefig(folder / "student_durations.png")
-    plt.close()
+    if not duration_df.empty:  # Make sure student_durations isn't empty, bc that makes the histogram a n g e r y
+        duration_df.hist()
+        plt.xlabel("Duration (min)")
+        plt.ylabel("Number of Students")
+        plt.title("Student Durations")
+        plt.savefig(folder / "student_durations.png")
+        plt.close()
 
 
 def generate_timestamp():
