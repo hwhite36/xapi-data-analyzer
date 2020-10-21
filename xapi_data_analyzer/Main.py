@@ -80,7 +80,7 @@ def use_json(timestamp):
 
     students_master = pd.DataFrame(index = GlobalData.class_list)
 
-    for day in days.values():
+    for day in list(days.values())[::3]:
         # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
@@ -113,13 +113,13 @@ def use_json(timestamp):
             generate_graphs(day_df, df_students, day_folder)
 
     # Rearrange columns
-    cols = students_master.columns
-    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4', 'Unit5']
+    cols = list(students_master.columns)
+    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4']
     for unit in units:
         cols.append(cols.pop(cols.index(unit)))
-    students_master = students_master[[cols]]
+    students_master = students_master[cols]
     # Compute a totals column
-    students_master.assign(total= lambda x: x.Unit1 + x.Unit2 + x.Unit3 + x.Unit4 + x.Unit5)
+    students_master['Total'] = students_master[units].sum(axis=1)
     students_master.to_csv(base_folder / "TotalDurations.csv")
 
 def generate_graphs(element_df, duration_df, folder):
