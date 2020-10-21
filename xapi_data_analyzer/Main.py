@@ -78,7 +78,8 @@ def use_json(timestamp):
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
     os.mkdir(base_folder)
 
-    for day in days.values():
+    for i, day in enumerate(days.values(), 1):
+        sg.OneLineProgressMeter("Progress", i, len(days.values()), orientation="h")
         # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
