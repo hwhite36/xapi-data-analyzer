@@ -80,7 +80,8 @@ def use_json(timestamp):
 
     students_master = pd.DataFrame(index=GlobalData.class_list)
 
-    for day in days.values():
+    for i, day in enumerate(days.values(), 1):
+        sg.OneLineProgressMeter("Progress", i, len(days.values()), orientation="h")
         # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
