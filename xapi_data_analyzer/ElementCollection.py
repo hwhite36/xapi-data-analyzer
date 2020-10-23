@@ -29,53 +29,26 @@ class ElementCollection:
         only need to run them once. All variables that depend on these expensive operations are defined as instance
         variables, rather than a local variable returned by the function. This is so they can be accessed without
         re-calling the expensive function.
+
+        For question_name_dict: If "Question/Slide" for a row is populated, it adds it to a dictionary.
+        For interacted_dict: Adds a user to a dictionary if they interacted with an element (defined by certain verbs
+        in xAPI).
         """
         question_name_dict = dict.fromkeys(self.id_list)
         interacted_dict = {k: [] for k in self.id_list}
 
-        for index, row in self.data.iterrows():
+        for row in zip(self.data["Email"], self.data["object id"], self.data["Question/Slide"]):
             # Question name dict stuff
-            if pd.notna(row["Question/Slide"]):
-                question_name_dict[row["object id"]] = row["Question/Slide"]
+            if pd.notna(row[2]):
+                question_name_dict[row[1]] = row[2]
             # Interacted dict stuff
-            if not (row["Email"] in interacted_dict[row["object id"]]):
-                interacted_dict[row["object id"]].append(row["Email"])
+            if not (row[0] in interacted_dict[row[1]]):
+                interacted_dict[row[1]].append(row[0])
 
         question_name_dict = collections.OrderedDict(sorted(question_name_dict.items()))
 
         self.question_name_dict = question_name_dict
         self.interacted_dict = interacted_dict
-
-    def get_question_name_dict(self):
-        """
-        Iterates over the raw data. If "Question/Slide" for a row is populated, it adds it to a dictionary.
-
-        :param: none
-        :return: a dictionary with keys = H5P ID and values = Question/Slide
-        """
-        question_name_dict = dict.fromkeys(self.id_list)
-        for index, row in self.data.iterrows():
-            if pd.notna(row["Question/Slide"]):
-                question_name_dict[row["object id"]] = row["Question/Slide"]
-
-        # Sorts the dictionary by key, but preserves dictionary type
-        question_name_dict = collections.OrderedDict(sorted(question_name_dict.items()))
-        return question_name_dict
-
-    def get_interacted_dict(self):
-        """
-        Iterates over the raw data. Adds a user to a dictionary if they interacted with an element (defined by
-        certain verbs in xAPI).
-
-        :param: none
-        :return: a dict with keys = H5P ID and values = lists of users who interacted
-        """
-        interacted_dict = {k: [] for k in self.id_list}
-        for index, row in self.data.iterrows():
-            if not (row["Email"] in interacted_dict[row["object id"]]):
-                interacted_dict[row["object id"]].append(row["Email"])
-
-        return interacted_dict
 
     def get_percent_interacted(self):
         """
