@@ -74,7 +74,7 @@ class ElementCollection:
         :return: a dictionary mapping students to their duration
         """
         durations = {}
-        delta_max = datetime.timedelta(minutes=10)
+        delta_max = datetime.timedelta(minutes=30)
         for student in self.class_list:
             student_df = self.data[self.data['Email'] == student].reset_index()
             duration = datetime.timedelta()
