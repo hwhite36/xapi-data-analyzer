@@ -125,7 +125,7 @@ Associated with each student is
     * This is calculated by computing the total time in between each interaction. Gaps larger than `Time_Delta` (more info about this below) are ignored.
 
 ### The DayElements.json File
-This file contains configuration information for the tool. It is required to run the tool.
+This file contains required configuration information.
 The file has data regarding which emails to filter, the 'time_delta', and each textbook chapter.
 The schema can be found DayElementSchema.json, and more detail is also included below.
 A sample DayElement.json file is included in the repository.
@@ -162,11 +162,11 @@ Schema:
   "min": 1
 },
 ```
-Example:
+Example:  
 `"Time_Delta": 30,`
 
 #### Days
-This list contains data about each Day relevant to the analysis.
+This list contains data about each Day relevant to the analysis.  
 Schema:
 ```
 "Days": {
