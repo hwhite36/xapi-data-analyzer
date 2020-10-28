@@ -221,11 +221,11 @@ def main():
             if id_list:
                 try:
                     id_list = [int(item.strip()) for item in id_list.split(",")]
-                    use_id_list(id_list, timestamp)
                 except ValueError:
                     sg.Popup("ERROR: The items entered in the H5P ID list were not valid integers! Please try again.",
                              title="Error")
                     continue
+                use_id_list(id_list, timestamp)
             else:
                 use_json(timestamp)
 
