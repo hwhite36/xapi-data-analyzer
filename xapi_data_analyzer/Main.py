@@ -26,6 +26,12 @@ def create_main_window():
                  "correspond to which days:")],
         [sg.In(), sg.FileBrowse(key="JSONIN")],
         [sg.HorizontalSeparator(color="black")],
+        [sg.Text("This program has two modes: it can either get data for certain days (chapters) or for specific H5P "
+                 "IDs. Please choose a method and only fill in one of the following text boxes.")],
+        [sg.Text()],
+        [sg.Text("Please enter a comma-separated list of days you would like to get data on, or enter \"all\" to "
+                 "have all days with data from the spreadsheet analyzed.")],
+        [sg.InputText(size=(20, 1), key="DAYLIST")],
         [sg.Text("OR", font="Any 12 bold")],
         [sg.Text("if you know the exact H5P elements you want data on, please enter a comma-separated list of "
                  "their ID numbers in the box below (leave blank if using the JSON file).")],
@@ -65,24 +71,24 @@ def use_id_list(id_list, timestamp):
     # Generate graphs
     generate_graphs(elements_df, df_students, save_folder)
 
-    sg.Popup("All files successfully saved!", title="Success!")  # FIXME this is inconsistent with json method, which has no popup
+    sg.Popup("All files successfully saved!", title="Success!")
 
 
-def use_json(timestamp):
+def use_json(timestamp, day_dict_list):  # FIXME broken when day_dict_list isn't the complete list of dicts from json (due to the master durations)
     """
     Controls dataframe creation if the user provides a JSON file. Creates a dataframe and graphs for every day that has
     data, and outputs it into a day-specific folder within the base folder.
 
     :param timestamp: timestamp string for file-naming purposes
+    :param day_dict_list: FIXME
     """
-    days = GlobalData.DayInfo['Days']
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
     os.mkdir(base_folder)
 
     students_master = pd.DataFrame(index=GlobalData.class_list)
 
-    for i, day in enumerate(days.values(), 1):
-        sg.OneLineProgressMeter("Progress", i, len(days.values()), orientation="h")
+    for i, day in enumerate(day_dict_list, 1):
+        sg.OneLineProgressMeter("Progress", i, len(day_dict_list), orientation="h")
         # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
@@ -199,9 +205,7 @@ def main():
             webbrowser.open("https://github.com/HBlanco36/xapi-data-analyzer")
 
         if event == "Go":
-            # Parse the ID list
-            id_list = values["IDLIST"]
-
+            # Load in the data and JSON files
             try:
                 GlobalData.set_data_vars(values["FILEIN"], values["JSONIN"])
             except KeyError as e:
@@ -219,8 +223,30 @@ def main():
             # Generate a timestamp for naming the files
             timestamp = generate_timestamp()
 
-            # If the user entered IDs, use those. Otherwise, use the json data
-            if id_list:
+            # Parse the ID list and Days list
+            id_list = values["IDLIST"]
+            day_num_list = values["DAYLIST"]
+
+            # Check the "Days" list first
+            if day_num_list:
+                if str(day_num_list).lower().strip() == "all":  # Send in the full list of days from the JSON
+                    use_json(timestamp, GlobalData.DayInfo['Days'].values())
+                else:  # Parse the list of only the days the user wants and send that in instead
+                    try:
+                        day_num_list = [int(item.strip()) for item in day_num_list.split(",")]
+                    except ValueError:
+                        sg.Popup(
+                            "ERROR: The items entered in the Days list were not valid integers! Please try again.",
+                            title="Error")
+                        continue
+                    day_dict_list = []
+                    for day in GlobalData.DayInfo["Days"].values():
+                        if day["DayNumber"] in day_num_list:
+                            day_dict_list.append(day)
+
+                    use_json(timestamp, day_dict_list)  # TODO maybe add something saying if they entered days that aren't valid (like day 465)
+
+            elif id_list:  # Ok, then check if the user entered IDs, and use those if so
                 try:
                     id_list = [int(item.strip()) for item in id_list.split(",")]
                 except ValueError:
@@ -229,7 +255,8 @@ def main():
                     continue
                 use_id_list(id_list, timestamp)
             else:
-                use_json(timestamp)
+                sg.Popup("Error: no method selected! Please read the instructions and enter appropriate values into "
+                         "one of the text boxes above", title="Error")
 
     main_window.close()
 
