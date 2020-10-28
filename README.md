@@ -77,7 +77,7 @@ Click the second "Browse" button and select the provided `DayElement.json` file.
 which H5P IDs correspond to which "Days" in the CHEM 109 curriculum, so the program can output data grouped by Day.
 
 If you select a JSON file, please leave the H5P ID list input blank.
-The 
+More information is included below about the `DayElement.json` file.
 
 ![Browse for JSON image](images/json_click_browse.png)
 ![Open JSON image](images/json_open_file.png)
@@ -104,6 +104,25 @@ If you input your own list, the main folder will just contain one data csv, one 
 ![Resulting folder image](images/end_folder.png)
 
 Note: the timestamp is generated based on Central Time (US).
+
+### Output
+For each day chosen, or for the group of IDs selected, two .csv files will be generated.
+`DayX.csv` (or `ElementCollection.csv` if using an IDList) includes one row per H5P element.
+Associated with each element is
+* The objectID (elementID)
+* The Element Name
+    * If the element name cannot be found, this will be left blank
+* A list of students who interacted with the element
+    * If a student generated an xAPI statement with this element and with any verb besides `consumed` they appear in this list
+* The number of students who interacted
+* The percentage of all students who interacted
+    * All students being defined as every email present in the data (after filtering emails)
+    
+`StudentDurations.csv` has one row per student who made some interaction with the chapter.
+Associated with each student is
+* The student's email
+* The students total duration for the given day
+    * This is calculated by computing the total time in between each interaction. Gaps larger than `Time_Delta` (more info about this below) are ignored.
 
 ### The DayElements.json File
 This file contains configuration information for the tool. It is required to run the tool.
