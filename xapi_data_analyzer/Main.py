@@ -7,6 +7,7 @@ import pytz
 import matplotlib.pyplot as plt
 from pathlib import Path
 import os
+import json
 import webbrowser
 
 
@@ -18,13 +19,13 @@ def create_main_window():
     """
     layout = [
         [sg.Text("UW-Madison xAPI Data Analyzer", font="Any 15 bold")],
-        [sg.Text("Please select the xAPI data .csv file from the DoIT Learning Locker "
-                 "(usually called something like dataMM-DD-YY.csv)")],
+        [sg.Text("Please select the non-cleaned xAPI data .csv file from the DoIT Learning Locker "
+                 "(usually called something like dataMM-DD-YY.csv):")],
         [sg.In(), sg.FileBrowse(key="FILEIN")],
-        [sg.HorizontalSeparator(color="black")],
-        [sg.Text("If you would like the data to be automatically organized by Day (recommended), please select "
-                 "the DayElement.json file:")],
+        [sg.Text("Please select the DayElement.json file, which contains info on the timedelta and which H5P IDs "
+                 "correspond to which days:")],
         [sg.In(), sg.FileBrowse(key="JSONIN")],
+        [sg.HorizontalSeparator(color="black")],
         [sg.Text("OR", font="Any 12 bold")],
         [sg.Text("if you know the exact H5P elements you want data on, please enter a comma-separated list of "
                  "their ID numbers in the box below (leave blank if using the JSON file).")],
@@ -202,15 +203,16 @@ def main():
             id_list = values["IDLIST"]
 
             try:
-                if id_list:  # Pass -1 as the json path so GlobalData doesn't try parsing it
-                    GlobalData.set_data_vars(values["FILEIN"], -1)
-                else:
-                    GlobalData.set_data_vars(values["FILEIN"], values["JSONIN"])
+                GlobalData.set_data_vars(values["FILEIN"], values["JSONIN"])
             except KeyError as e:
                 sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
                 continue
             except FileNotFoundError:
-                sg.Popup("ERROR: Data file not found! Please double-check the path to the data file and try again.",
+                sg.Popup("ERROR: A provided file was not found! Please double-check the path to the data and JSON files"
+                         " and try again.", title="Error")
+                continue
+            except json.JSONDecodeError:
+                sg.Popup("ERROR: The provided JSON file could not be read. Please ensure its formatting is correct.",
                          title="Error")
                 continue
 
