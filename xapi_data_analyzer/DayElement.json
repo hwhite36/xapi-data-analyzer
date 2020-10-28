@@ -2,6 +2,7 @@
   "Filter_Emails": [
     "jwmoore@chem.wisc.edu", "wboettge@wisc.edu", "MKCONLON@WISC.EDU", "jia.zhou@wisc.edu", "hwhite9@wisc.edu", "rachel.bain@wisc.edu"
   ],
+  "Time_Delta": 30,
   "Days": {
     "Day_1": {
       "Title": "Chemistry, Matter, Energy, Models",

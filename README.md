@@ -77,6 +77,7 @@ Click the second "Browse" button and select the provided `DayElement.json` file.
 which H5P IDs correspond to which "Days" in the CHEM 109 curriculum, so the program can output data grouped by Day.
 
 If you select a JSON file, please leave the H5P ID list input blank.
+The 
 
 ![Browse for JSON image](images/json_click_browse.png)
 ![Open JSON image](images/json_open_file.png)
@@ -103,6 +104,108 @@ If you input your own list, the main folder will just contain one data csv, one 
 ![Resulting folder image](images/end_folder.png)
 
 Note: the timestamp is generated based on Central Time (US).
+
+### The DayElements.json File
+This file contains configuration information for the tool. It is required to run the tool.
+The file has data regarding which emails to filter, the 'time_delta', and each textbook chapter.
+The schema can be found DayElementSchema.json, and more detail is also included below.
+A sample DayElement.json file is included in the repository.
+#### Filter_Emails
+Schema:
+```
+"Filter_Emails": {
+  "type": "array",
+  "description": "A list of emails to ignore (i.e. non-student emails).",
+  "items": {
+    "description": "An email",
+    "type": "string"
+  }
+}
+```
+Example:
+```
+  "Filter_Emails": [
+    "professor@wisc.edu", "dev@wisc.edu", "TA@wisc.edu"
+  ],
+``` 
+#### Time_Delta
+When calculating the time a student spends on a given Day, a 'Time Delta' parameter is used.
+This is the max time in between interactions that a student can be considered actively reading the chapter.
+For example, a student might interact with an H5P element at 12:00, and then interact with another element at 12:20.
+If Time Delta is set to 10 minutes, we assume the student took a break in between interactions, and their total duration
+does not change. If Time Delta is instead 30 minutes, their total duration would increase by 20 minutes.
+
+Schema:
+```
+"Time_Delta": {
+  "description": "A number of minutes that defines a max duration in between interactions that a student is considered still engaged with the reading",
+  "type": "integer",
+  "min": 1
+},
+```
+Example:
+`"Time_Delta": 30,`
+
+#### Days
+This list contains data about each Day relevant to the analysis.
+Schema:
+```
+"Days": {
+  "description": "A list of day objects containing relevant info such as the title and H5P elements present",
+  "type": "array",
+
+  "items": {
+    "type": "object",
+    "properties": {
+      "Title": {
+        "description": "The name of the chapter",
+        "type": "string"
+      },
+      "DayNumber": {
+        "description": "The Day Number",
+        "type": "integer",
+        "min": 1
+      },
+      "Unit": {
+        "description": "The unit this day is a part of",
+        "type": "integer",
+        "min": 1
+      },
+      "Elements": {
+        "description": "A list of the H5P elementIDs found in the chapter",
+        "type": "array",
+        "items": {
+          "description": "An H5P ElementID",
+          "type": "integer",
+          "min": 1
+        }
+      }
+    }
+  }
+}
+```
+Example (for 2 days):
+```
+"Days":{
+  "Day_1": {
+    "Title": "Chemistry, Matter, Energy, Models",
+    "DayNumber": 1,
+    "Unit": 1,
+    "Elements": [
+    308, 311, 313, 209, 106
+    ]
+  },
+  "Day_2": {
+    "Title": "Atomic Spectra and Atomic Orbitals",
+    "DayNumber": 2,
+    "Unit": 1,
+    "Elements": [
+    219, 213, 218, 23, 212, 22, 21, 226, 223, 224, 353, 216, 350, 354, 414, 415
+    ]
+  }, ...
+}
+```
+
 
 ## License
 This package is licensed under the MIT License. The full license text is available in LICENSE in the root directory.
