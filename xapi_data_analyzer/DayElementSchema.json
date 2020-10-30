@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Configuration information for the xAPI DataAnalyzer tool.",
+  "type": "object",
+
+  "required": [
+    "Filter_Emails", "Time_Delta", "Days"
+  ],
+  "properties": {
+    "Filter_Emails": {
+      "type": "array",
+      "description": "A list of emails to ignore (i.e. non-student emails).",
+      "items": {
+        "description": "An email",
+        "type": "string"
+      }
+    },
+
+    "Time_Delta": {
+      "description": "A number of minutes that defines a max duration in between interactions that a student is considered still engaged with the reading",
+      "type": "integer",
+      "min": 1
+    },
+
+    "Days": {
+      "description": "An object with a property for each day",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "(Day_\\d{1,2})"
+      },
+      "patternProperties": {
+        "(Day_\\d{1,2})": {
+          "type": "object",
+          "properties": {
+            "Title": {
+              "description": "The name of the chapter",
+              "type": "string"
+            },
+            "DayNumber": {
+              "description": "The Day Number",
+              "type": "integer",
+              "min": 1
+            },
+            "Unit": {
+              "description": "The unit this day is a part of",
+              "type": "integer",
+              "min": 1
+            },
+            "Elements": {
+              "description": "A list of the H5P elementIDs found in the chapter",
+              "type": "array",
+              "items": {
+                "description": "An H5P ElementID",
+                "type": "integer",
+                "min": 1,
+                "max": 999
+              }
+            }
+          },
+          "required": [
+              "Title", "DayNumber", "Unit", "Elements"
+          ]
+        }
+      }
+    }
+  }
+}
