@@ -7,6 +7,7 @@ import pytz
 import matplotlib.pyplot as plt
 from pathlib import Path
 import os
+import json
 import webbrowser
 
 
@@ -18,16 +19,22 @@ def create_main_window():
     """
     layout = [
         [sg.Text("UW-Madison xAPI Data Analyzer", font="Any 15 bold")],
-        [sg.Text("Please select the xAPI data .csv file from the DoIT Learning Locker "
-                 "(usually called something like dataMM-DD-YY.csv)")],
+        [sg.Text("Please select the non-cleaned xAPI data .csv file from the DoIT Learning Locker "
+                 "(usually called something like dataMM-DD-YY.csv):")],
         [sg.In(), sg.FileBrowse(key="FILEIN")],
-        [sg.HorizontalSeparator(color="black")],
-        [sg.Text("If you would like the data to be automatically organized by Day (recommended), please select "
-                 "the DayElement.json file:")],
+        [sg.Text("Please select the DayElement.json file, which contains info on the timedelta and which H5P IDs "
+                 "correspond to which days:")],
         [sg.In(), sg.FileBrowse(key="JSONIN")],
+        [sg.HorizontalSeparator(color="black")],
+        [sg.Text("This program has two modes: it can either get data for certain days (chapters) or for specific H5P "
+                 "IDs. Please choose a method and only fill in one of the following text boxes.")],
+        [sg.Text()],
+        [sg.Text("Please enter a comma-separated list of days you would like to get data on, or enter \"all\" to "
+                 "have all days with data from the spreadsheet analyzed.")],
+        [sg.InputText(size=(20, 1), key="DAYLIST")],
         [sg.Text("OR", font="Any 12 bold")],
         [sg.Text("if you know the exact H5P elements you want data on, please enter a comma-separated list of "
-                 "their ID numbers in the box below (leave blank if using the JSON file).")],
+                 "their ID numbers in the box below (leave blank if using above method).")],
         [sg.InputText(size=(20, 1), key="IDLIST")],
         [sg.HorizontalSeparator(color="black")],
         [sg.Text("The data will be saved to the current directory under the folder 'xAPI-Data-Analyzer_$TIMESTAMP/'",
@@ -64,24 +71,25 @@ def use_id_list(id_list, timestamp):
     # Generate graphs
     generate_graphs(elements_df, df_students, save_folder)
 
-    sg.Popup("All files successfully saved!", title="Success!")  # FIXME this is inconsistent with json method, which has no popup
+    sg.Popup("All files successfully saved!", title="Success!")
 
 
-def use_json(timestamp):
+def use_json(timestamp, day_dict_list):
     """
     Controls dataframe creation if the user provides a JSON file. Creates a dataframe and graphs for every day that has
     data, and outputs it into a day-specific folder within the base folder.
 
     :param timestamp: timestamp string for file-naming purposes
+    :param day_dict_list: a list of the day dictionary objects (from JSON file) that we're analyzing
     """
-    days = GlobalData.DayInfo['Days']
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
     os.mkdir(base_folder)
 
     students_master = pd.DataFrame(index=GlobalData.class_list)
+    units = []
 
-    for i, day in enumerate(days.values(), 1):
-        sg.OneLineProgressMeter("Progress", i, len(days.values()), orientation="h")
+    for i, day in enumerate(day_dict_list, 1):
+        sg.OneLineProgressMeter("Progress", i, len(day_dict_list), orientation="h")
         # Get info from JSON file
         day_num = day['DayNumber']
         day_ids = day['Elements']
@@ -111,9 +119,10 @@ def use_json(timestamp):
             # Update aggregated students df
             students_master["Day" + str(day_num)] = pd.Series(students_dict)
             if unit_name in students_master.columns:
-                students_master[unit_name].add(pd.Series(students_dict))
+                students_master[unit_name] = students_master[unit_name].add(pd.Series(students_dict), fill_value=0)
             else:
                 students_master[unit_name] = pd.Series(students_dict)
+                units.append(unit_name)
 
             # Generate and save graphs
             generate_graphs(day_df, df_students, day_folder)
@@ -121,13 +130,15 @@ def use_json(timestamp):
     # Finish processing students_master
     # Rearrange columns
     cols = list(students_master.columns)
-    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4', 'Unit5']  # FIXME can we do this not hard-coded? From JSON maybe?
     for unit in units:
         cols.append(cols.pop(cols.index(unit)))
     students_master = students_master[cols]
+
     # Compute a totals column
     students_master['Total'] = students_master[units].sum(axis=1)
     students_master.to_csv(base_folder / "TotalDurations.csv")
+
+    sg.Popup("All files successfully saved!", title="Success!")
 
 
 def generate_graphs(element_df, duration_df, folder):
@@ -198,27 +209,55 @@ def main():
             webbrowser.open("https://github.com/HBlanco36/xapi-data-analyzer")
 
         if event == "Go":
-            # Parse the ID list
-            id_list = values["IDLIST"]
-
+            # Load in the data and JSON files
             try:
-                if id_list:  # Pass -1 as the json path so GlobalData doesn't try parsing it
-                    GlobalData.set_data_vars(values["FILEIN"], -1)
-                else:
-                    GlobalData.set_data_vars(values["FILEIN"], values["JSONIN"])
+                GlobalData.set_data_vars(values["FILEIN"], values["JSONIN"])
             except KeyError as e:
                 sg.Popup("ERROR: The following H5P element was not found: " + str(e.args[0]), title="Error")
                 continue
             except FileNotFoundError:
-                sg.Popup("ERROR: Data file not found! Please double-check the path to the data file and try again.",
+                sg.Popup("ERROR: A provided file was not found! Please double-check the path to the data and JSON files"
+                         " and try again.", title="Error")
+                continue
+            except json.JSONDecodeError:
+                sg.Popup("ERROR: The provided JSON file could not be read. Please ensure its formatting is correct.",
                          title="Error")
                 continue
 
             # Generate a timestamp for naming the files
             timestamp = generate_timestamp()
 
-            # If the user entered IDs, use those. Otherwise, use the json data
-            if id_list:
+            # Parse the ID list and Days list
+            id_list = values["IDLIST"]
+            day_num_list = values["DAYLIST"]
+
+            # Check the "Days" list first
+            if day_num_list:
+                if str(day_num_list).lower().strip() == "all":  # Send in the full list of days from the JSON
+                    use_json(timestamp, GlobalData.DayInfo['Days'].values())
+                else:  # Parse the list of only the days the user wants and send that in instead
+                    try:
+                        day_num_list = [int(item.strip()) for item in day_num_list.split(",")]
+                    except ValueError:
+                        sg.Popup(
+                            "ERROR: The items entered in the Days list were not valid integers! Please try again.",
+                            title="Error")
+                        continue
+
+                    day_dict_list = []
+                    for day in GlobalData.DayInfo["Days"].values():
+                        if day["DayNumber"] in day_num_list:
+                            day_dict_list.append(day)
+                            day_num_list.remove(day["DayNumber"])
+
+                    # If there's ints that the user entered that aren't days in JSON, let them know
+                    if day_num_list:
+                        sg.Popup("INFO: The following day numbers entered were not found in the JSON file. These "
+                                 "values will be ignored.\n" + str(day_num_list), title="Info")
+
+                    use_json(timestamp, day_dict_list)
+
+            elif id_list:  # Ok, then check if the user entered IDs, and use those if so
                 try:
                     id_list = [int(item.strip()) for item in id_list.split(",")]
                 except ValueError:
@@ -226,8 +265,10 @@ def main():
                              title="Error")
                     continue
                 use_id_list(id_list, timestamp)
-            else:
-                use_json(timestamp)
+
+            else:  # The user must've not entered anything in either input
+                sg.Popup("Error: no method selected! Please read the instructions and enter appropriate values into "
+                         "one of the text boxes above", title="Error")
 
     main_window.close()
 
