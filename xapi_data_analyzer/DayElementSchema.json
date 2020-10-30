@@ -26,10 +26,10 @@
       "description": "An object with a property for each day",
       "type": "object",
       "propertyNames": {
-        "pattern": "(Day_\\d{1,2})"
+        "pattern": "^Day_\\d{1,2}$"
       },
       "patternProperties": {
-        "(Day_\\d{1,2})": {
+        "^Day_\\d{1,2}$": {
           "type": "object",
           "properties": {
             "Title": {
