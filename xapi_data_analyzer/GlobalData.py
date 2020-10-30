@@ -49,18 +49,10 @@ def set_data_vars(data_path, json_path):
 
     class_list = set(raw_data["Email"])
 
-    # import data in DayElement.json
-    if json_path != -1:
-        try:
-            with open(json_path) as f:
-                DayInfo = json.load(f)
-                # Drop data from non-student emails (using the filter emails list)
-                raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
-                class_list = class_list - set(DayInfo["Filter_Emails"])
-                delta_max = DayInfo["Time_Delta"]
-
-        except json.JSONDecodeError:
-            sg.Popup("ERROR: DayElement.json could could not be read", title="Error")
-
-        except FileNotFoundError:
-            sg.Popup("ERROR: DayElement.json could could not be found", title="Error")
+    # import data in DayElement.json (Error handling done in Main.py)
+    with open(json_path) as f:
+        DayInfo = json.load(f)
+        # Drop data from non-student emails (using the filter emails list)
+        raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
+        class_list = class_list - set(DayInfo["Filter_Emails"])
+        delta_max = DayInfo["Time_Delta"]
