@@ -5,6 +5,7 @@ import PySimpleGUI as sg
 raw_data = None
 class_list = None
 DayInfo = None
+delta_max = None
 
 
 def set_data_vars(data_path, json_path):
@@ -21,6 +22,7 @@ def set_data_vars(data_path, json_path):
     global raw_data
     global class_list
     global DayInfo
+    global delta_max
 
     raw_data = pd.read_csv(data_path)
 
@@ -55,6 +57,7 @@ def set_data_vars(data_path, json_path):
                 # Drop data from non-student emails (using the filter emails list)
                 raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
                 class_list = class_list - set(DayInfo["Filter_Emails"])
+                delta_max = DayInfo["Time_Delta"]
 
         except json.JSONDecodeError:
             sg.Popup("ERROR: DayElement.json could could not be read", title="Error")
