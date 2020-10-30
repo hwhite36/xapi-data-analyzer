@@ -34,7 +34,7 @@ def create_main_window():
         [sg.InputText(size=(20, 1), key="DAYLIST")],
         [sg.Text("OR", font="Any 12 bold")],
         [sg.Text("if you know the exact H5P elements you want data on, please enter a comma-separated list of "
-                 "their ID numbers in the box below (leave blank if using the JSON file).")],
+                 "their ID numbers in the box below (leave blank if using above method).")],
         [sg.InputText(size=(20, 1), key="IDLIST")],
         [sg.HorizontalSeparator(color="black")],
         [sg.Text("The data will be saved to the current directory under the folder 'xAPI-Data-Analyzer_$TIMESTAMP/'",
@@ -137,6 +137,8 @@ def use_json(timestamp, day_dict_list):
     # Compute a totals column
     students_master['Total'] = students_master[units].sum(axis=1)
     students_master.to_csv(base_folder / "TotalDurations.csv")
+
+    sg.Popup("All files successfully saved!", title="Success!")
 
 
 def generate_graphs(element_df, duration_df, folder):
@@ -241,12 +243,19 @@ def main():
                             "ERROR: The items entered in the Days list were not valid integers! Please try again.",
                             title="Error")
                         continue
+
                     day_dict_list = []
                     for day in GlobalData.DayInfo["Days"].values():
                         if day["DayNumber"] in day_num_list:
                             day_dict_list.append(day)
+                            day_num_list.remove(day["DayNumber"])
 
-                    use_json(timestamp, day_dict_list)  # TODO maybe add something saying if they entered days that aren't valid (like day 465)
+                    # If there's ints that the user entered that aren't days in JSON, let them know
+                    if day_num_list:
+                        sg.Popup("INFO: The following day numbers entered were not found in the JSON file. These "
+                                 "values will be ignored.\n" + str(day_num_list), title="Info")
+
+                    use_json(timestamp, day_dict_list)
 
             elif id_list:  # Ok, then check if the user entered IDs, and use those if so
                 try:
@@ -256,7 +265,8 @@ def main():
                              title="Error")
                     continue
                 use_id_list(id_list, timestamp)
-            else:
+
+            else:  # The user must've not entered anything in either input
                 sg.Popup("Error: no method selected! Please read the instructions and enter appropriate values into "
                          "one of the text boxes above", title="Error")
 
