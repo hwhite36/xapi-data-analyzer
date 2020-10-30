@@ -86,6 +86,7 @@ def use_json(timestamp, day_dict_list):  # FIXME broken when day_dict_list isn't
     os.mkdir(base_folder)
 
     students_master = pd.DataFrame(index=GlobalData.class_list)
+    units = []
 
     for i, day in enumerate(day_dict_list, 1):
         sg.OneLineProgressMeter("Progress", i, len(day_dict_list), orientation="h")
@@ -121,6 +122,7 @@ def use_json(timestamp, day_dict_list):  # FIXME broken when day_dict_list isn't
                 students_master[unit_name].add(pd.Series(students_dict))
             else:
                 students_master[unit_name] = pd.Series(students_dict)
+                units.append(unit_name)
 
             # Generate and save graphs
             generate_graphs(day_df, df_students, day_folder)
@@ -128,7 +130,6 @@ def use_json(timestamp, day_dict_list):  # FIXME broken when day_dict_list isn't
     # Finish processing students_master
     # Rearrange columns
     cols = list(students_master.columns)
-    units = ['Unit1', 'Unit2', 'Unit3', 'Unit4', 'Unit5']  # FIXME can we do this not hard-coded? From JSON maybe?
     for unit in units:
         cols.append(cols.pop(cols.index(unit)))
     students_master = students_master[cols]
