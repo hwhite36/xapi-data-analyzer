@@ -65,7 +65,7 @@ def use_id_list(id_list, timestamp):
     elements_df.to_csv(save_folder / "ElementCollection.csv")
 
     # create student durations dataframe
-    df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
+    df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(GlobalData.delta_max), orient='index')
     df_students.to_csv(save_folder / "StudentDurations.csv")
 
     # Generate graphs
@@ -107,7 +107,7 @@ def use_json(timestamp, day_dict_list):
             day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
 
             # create student durations dataframe
-            students_dict = element_collection.get_students_duration()
+            students_dict = element_collection.get_students_duration(GlobalData.delta_max)
             df_students = pd.DataFrame.from_dict(students_dict, orient='index')
             if not df_students.empty:
                 df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
