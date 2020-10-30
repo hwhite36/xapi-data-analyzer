@@ -74,13 +74,13 @@ def use_id_list(id_list, timestamp):
     sg.Popup("All files successfully saved!", title="Success!")
 
 
-def use_json(timestamp, day_dict_list):  # FIXME broken when day_dict_list isn't the complete list of dicts from json (due to the master durations)
+def use_json(timestamp, day_dict_list):
     """
     Controls dataframe creation if the user provides a JSON file. Creates a dataframe and graphs for every day that has
     data, and outputs it into a day-specific folder within the base folder.
 
     :param timestamp: timestamp string for file-naming purposes
-    :param day_dict_list: FIXME
+    :param day_dict_list: a list of the day dictionary objects (from JSON file) that we're analyzing
     """
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
     os.mkdir(base_folder)
@@ -119,7 +119,7 @@ def use_json(timestamp, day_dict_list):  # FIXME broken when day_dict_list isn't
             # Update aggregated students df
             students_master["Day" + str(day_num)] = pd.Series(students_dict)
             if unit_name in students_master.columns:
-                students_master[unit_name].add(pd.Series(students_dict))
+                students_master[unit_name] = students_master[unit_name].add(pd.Series(students_dict), fill_value=0)
             else:
                 students_master[unit_name] = pd.Series(students_dict)
                 units.append(unit_name)
@@ -133,6 +133,7 @@ def use_json(timestamp, day_dict_list):  # FIXME broken when day_dict_list isn't
     for unit in units:
         cols.append(cols.pop(cols.index(unit)))
     students_master = students_master[cols]
+
     # Compute a totals column
     students_master['Total'] = students_master[units].sum(axis=1)
     students_master.to_csv(base_folder / "TotalDurations.csv")
