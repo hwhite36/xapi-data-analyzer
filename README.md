@@ -1,4 +1,6 @@
 # xapi-data-analyzer
+![logo](images/logo.png)
+
 This program was originally created by Walt Boettge and Harrison White, working under Dr. John Moore at the University 
 of Wisconsin-Madison Department of Chemistry.
 
