@@ -1,6 +1,10 @@
 import pandas as pd
 import json
 import PySimpleGUI as sg
+from jsonschema import validate
+from os import path
+import sys
+
 
 raw_data = None
 class_list = None
@@ -52,6 +56,14 @@ def set_data_vars(data_path, json_path):
     # import data in DayElement.json (Error handling done in Main.py)
     with open(json_path) as f:
         DayInfo = json.load(f)
+        # Find path to DayElementSchema
+        bundle_dir = getattr(sys, '_MEIPASS', path.abspath(path.dirname(__file__)))
+        validation_path = path.abspath(path.join(bundle_dir, 'DayElementSchema.json'))
+        with open(validation_path) as v:
+            schema = json.load(v)
+            # Perform Validation
+            validate(instance=DayInfo, schema=schema)
+
         # Drop data from non-student emails (using the filter emails list)
         raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
         class_list = class_list - set(DayInfo["Filter_Emails"])

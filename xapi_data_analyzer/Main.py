@@ -9,7 +9,7 @@ from pathlib import Path
 import os
 import json
 import webbrowser
-
+import jsonschema
 
 def create_main_window():
     """
@@ -220,6 +220,11 @@ def main():
             except json.JSONDecodeError:
                 sg.Popup("ERROR: The provided JSON file could not be read. Please ensure its formatting is correct.",
                          title="Error")
+                continue
+            except jsonschema.exceptions.ValidationError as e:
+                message = str(e.message).replace("^Day_\\\\d{1,2}$", "Day_XX")
+                sg.Popup("ERROR: The DayElement.json file is invalid, please check the Schema to ensure validity. \n"
+                        + message, title="Error")
                 continue
 
             # Generate a timestamp for naming the files
