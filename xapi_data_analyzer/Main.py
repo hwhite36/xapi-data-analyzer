@@ -9,7 +9,7 @@ from pathlib import Path
 import os
 import json
 import webbrowser
-
+import jsonschema
 
 def create_main_window():
     """
@@ -65,7 +65,7 @@ def use_id_list(id_list, timestamp):
     elements_df.to_csv(save_folder / "ElementCollection.csv")
 
     # create student durations dataframe
-    df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(), orient='index')
+    df_students = pd.DataFrame.from_dict(element_collection.get_students_duration(GlobalData.delta_max), orient='index')
     df_students.to_csv(save_folder / "StudentDurations.csv")
 
     # Generate graphs
@@ -107,7 +107,7 @@ def use_json(timestamp, day_dict_list):
             day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
 
             # create student durations dataframe
-            students_dict = element_collection.get_students_duration()
+            students_dict = element_collection.get_students_duration(GlobalData.delta_max)
             df_students = pd.DataFrame.from_dict(students_dict, orient='index')
             if not df_students.empty:
                 df_students.to_csv(day_folder / ("StudentDurations_Day" + str(day_num) + ".csv"))
@@ -222,6 +222,11 @@ def main():
             except json.JSONDecodeError:
                 sg.Popup("ERROR: The provided JSON file could not be read. Please ensure its formatting is correct.",
                          title="Error")
+                continue
+            except jsonschema.exceptions.ValidationError as e:
+                message = str(e.message).replace("^Day_\\\\d{1,2}$", "Day_XX")
+                sg.Popup("ERROR: The DayElement.json file is invalid, please check the Schema to ensure validity. \n"
+                        + message, title="Error")
                 continue
 
             # Generate a timestamp for naming the files
