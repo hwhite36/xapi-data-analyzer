@@ -66,15 +66,15 @@ class ElementCollection:
 
         return percent_interacted_dict
 
-    def get_students_duration(self):
+    def get_students_duration(self, delta_max):
         """
         Calculates each student's time spent on the range of
 
-        :param: none
+        :param: delta_max
         :return: a dictionary mapping students to their duration
         """
         durations = {}
-        delta_max = datetime.timedelta(minutes=30)
+        delta_max = datetime.timedelta(minutes=delta_max)
         for student in self.class_list:
             student_df = self.data[self.data['Email'] == student].reset_index()
             duration = datetime.timedelta()
