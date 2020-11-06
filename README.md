@@ -46,7 +46,7 @@ and PyInstaller, so you need to have matplotlib 3.0.3 installed (`pip install ma
 The first thing the program asks you to do is to select the .csv file containing the raw data from the DoIT Learning Locker.
 Click the top "Browse" button and select the appropriate file.
 
-![Browse CSV image](FIXME)
+![Browse CSV image](images/csv_browse.png)
 ![Open CSV image](images/csv_open_file.png)
 
 The program is designed for this data to be cumulative, although any section of data works.
@@ -75,7 +75,7 @@ Next, click the second "Browse" button and select the provided `DayElement.json`
 which H5P IDs correspond to which "Days" in the CHEM 109 curriculum, so the program can output data grouped by Day. It also
 contains information on the configurable `TimeDelta` input. More information is included below about the `DayElement.json` file.
 
-![Browse for JSON image](FIXME)
+![Browse for JSON image](images/json_browse.png)
 ![Open JSON image](images/json_open_file.png)
 
 ### Selecting the data to be analyzed
@@ -87,21 +87,21 @@ if you'd like only the H5P elements you enter to be analyzed and nothing more.
 To analyze data by Day, enter the Day numbers you would like analyzed as a comma-separated list in the first text input box.
 To analyze every Day that has data, type `all` into the box.
 
-**FIXME add scrots**
+![Enter Day list](images/enter_day_list.png)
 
 If you choose this method, leave the second text input box blank.
 
 #### For advanced users: analyzing data with a custom H5P ID list
 If you know the exact H5P IDs you want data on, enter their numbers as a comma-separated list into the second text input box.
 
-![Enter ID list image](FIXME)
+![Enter ID list image](images/enter_id_list.png)
 
 If you choose this method, leave the first text input box blank.
 
 ### Running the tool
 After you either enter Day numbers or H5P IDs, press the green "Go" button to run the program.
 
-![Click Go image](FIXME)
+![Click Go image](images/click_go.png)
 
 Depending on the size of the data .csv, the tool may take a couple minutes to run.
 
