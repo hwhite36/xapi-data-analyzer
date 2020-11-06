@@ -11,7 +11,7 @@ Learning Locker (in the "raw" format).
 
 ## Installation
 ### For users:
-Simply download the latest `xAPI Data Analyzer.exe` file and double-click it to launch the program. 
+Simply download the latest `xAPI-Data-Analyzer.exe` file and double-click it to launch the program. 
 
 You may get a popup from Windows on your first launch warning about a potential security risk -- this is because the 
 .exe is not signed by a registered Microsoft developer. Always exercise caution when running any unknown executables, 
@@ -28,12 +28,12 @@ To use the program, simply run `xapi_data_analyzer/Main.py`. The program depends
 * `jsonschema`
 
 #### Creating an executable
-To create an executable, install PyInstaller (`pip install pyinstaller`) and run the following command in the same 
-directory as `Main.py`:
+To create an executable, install PyInstaller (`pip install pyinstaller`) and run the following command in the project's
+root directory:
 
-`pyinstaller -wF Main.py`
+`pyinstaller -wF --add-data xapi_data_analyzer\DayElementSchema.json;. -i images\icon.ico -n xAPI-Data-Analyzer_vX.X xapi_data_analyzer\Main.py`
 
-This will create a standalone executable file named `Main` in the `dist` folder under the current directory 
+This will create a standalone executable file named `xAPI-Data-Analyzer_vX.X` in the `dist` folder under the current directory 
 (for whatever operating system you run the command on). This allows end users to run your program without having Python 
 or any of the third-party libraries installed!
 
@@ -46,11 +46,10 @@ and PyInstaller, so you need to have matplotlib 3.0.3 installed (`pip install ma
 The first thing the program asks you to do is to select the .csv file containing the raw data from the DoIT Learning Locker.
 Click the top "Browse" button and select the appropriate file.
 
-![Browse CSV image](images/csv_click_browse.png)
+![Browse CSV image](FIXME)
 ![Open CSV image](images/csv_open_file.png)
 
-If you're using the JSON input (more on that below), it's recommended that this data be cumulative from the start of the
-semester for maximum data output.
+The program is designed for this data to be cumulative, although any section of data works.
 
 #### A note on data format
 The program looks for the following columns in the spreadsheet (in any order):
@@ -71,29 +70,38 @@ The program looks for the following columns in the spreadsheet (in any order):
 The raw data *should* already be in an appropriate format, but it's important to note that **the tool requires that these columns
 exist with these exact names!**
 
-### JSON input/ID list
-The next part of the program gives you a choice: you can either choose a JSON file that maps H5P elements to "Days" in the
-CHEM 109 textbook, or you can enter your own list of H5P IDs to analyze.
+### JSON input
+Next, click the second "Browse" button and select the provided `DayElement.json` file. This file automatically tells the program
+which H5P IDs correspond to which "Days" in the CHEM 109 curriculum, so the program can output data grouped by Day. It also
+contains information on the configurable `TimeDelta` input. More information is included below about the `DayElement.json` file.
 
-#### The recommended way: JSON input
-Click the second "Browse" button and select the provided `DayElement.json` file. This file automatically tells the program
-which H5P IDs correspond to which "Days" in the CHEM 109 curriculum, so the program can output data grouped by Day.
-
-If you select a JSON file, please leave the H5P ID list input blank.
-More information is included below about the `DayElement.json` file.
-
-![Browse for JSON image](images/json_click_browse.png)
+![Browse for JSON image](FIXME)
 ![Open JSON image](images/json_open_file.png)
 
-#### For advanced users: enter your own H5P ID list
-If you know the exact H5P IDs you want data on, enter their numbers as a comma-separated list into the H5P ID list input.
+### Selecting the data to be analyzed
+The program now presents a choice: data can be analyzed by Day or by H5P ID. Grouping by Day is most convenient if you'd 
+like all of the data in the spreadsheet analyzed or you know the specific Days you'd like analyzed. Grouping by H5P ID is best
+if you'd like only the H5P elements you enter to be analyzed and nothing more.
 
-![Enter ID list image](images/enter_list_ids.png)
+#### Analyzing data by Day
+To analyze data by Day, enter the Day numbers you would like analyzed as a comma-separated list in the first text input box.
+To analyze every Day that has data, type `all` into the box.
+
+**FIXME add scrots**
+
+If you choose this method, leave the second text input box blank.
+
+#### For advanced users: analyzing data with a custom H5P ID list
+If you know the exact H5P IDs you want data on, enter their numbers as a comma-separated list into the second text input box.
+
+![Enter ID list image](FIXME)
+
+If you choose this method, leave the first text input box blank.
 
 ### Running the tool
-After you either select the JSON file or enter your H5P IDs, press the green "Go" button to run the program.
+After you either enter Day numbers or H5P IDs, press the green "Go" button to run the program.
 
-![Click Go image](images/click_go.png)
+![Click Go image](FIXME)
 
 Depending on the size of the data .csv, the tool may take a couple minutes to run.
 
