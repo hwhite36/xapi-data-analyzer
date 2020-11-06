@@ -174,32 +174,31 @@ Schema:
 ```
 "Days": {
   "description": "A list of day objects containing relevant info such as the title and H5P elements present",
-  "type": "array",
-
-  "items": {
-    "type": "object",
-    "properties": {
-      "Title": {
-        "description": "The name of the chapter",
-        "type": "string"
-      },
-      "DayNumber": {
-        "description": "The Day Number",
-        "type": "integer",
-        "min": 1
-      },
-      "Unit": {
-        "description": "The unit this day is a part of",
-        "type": "integer",
-        "min": 1
-      },
-      "Elements": {
-        "description": "A list of the H5P elementIDs found in the chapter",
-        "type": "array",
-        "items": {
-          "description": "An H5P ElementID",
+  "properties": {
+    "Day_XX": {
+      "properties": {
+        "Title": {
+          "description": "The name of the chapter",
+          "type": "string"
+        },
+        "DayNumber": {
+          "description": "The Day Number",
           "type": "integer",
           "min": 1
+        },
+        "Unit": {
+          "description": "The unit this day is a part of",
+          "type": "integer",
+          "min": 1
+        },
+        "Elements": {
+          "description": "A list of the H5P elementIDs found in the chapter",
+          "type": "array",
+          "items": {
+            "description": "An H5P ElementID",
+            "type": "integer",
+            "min": 1
+          }
         }
       }
     }
