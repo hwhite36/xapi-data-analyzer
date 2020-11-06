@@ -25,6 +25,7 @@ To use the program, simply run `xapi_data_analyzer/Main.py`. The program depends
 * `pandas`
 * `pysimplegui`
 * `matplotlib`
+* `jsonschema`
 
 #### Creating an executable
 To create an executable, install PyInstaller (`pip install pyinstaller`) and run the following command in the same 
