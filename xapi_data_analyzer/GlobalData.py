@@ -1,6 +1,5 @@
 import pandas as pd
 import json
-import PySimpleGUI as sg
 from jsonschema import validate
 from os import path
 import sys
