@@ -11,6 +11,7 @@ import json
 import webbrowser
 import jsonschema
 
+
 def create_main_window():
     """
     Creates the main window layout.
@@ -104,6 +105,8 @@ def use_json(timestamp, day_dict_list):
 
             # Create ElementCollection object and dataframe
             day_df = element_collection.get_dataframe()
+            # Uncomment below to print the number of bytes the dataframe takes in memory
+            # print("Day " + str(day_num) + ": " + str(day_df.memory_usage(index=True, deep=True).sum()))
             day_df.to_csv(day_folder / ("Day" + str(day_num) + ".csv"))
 
             # create student durations dataframe
