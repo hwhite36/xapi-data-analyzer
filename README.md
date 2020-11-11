@@ -11,7 +11,7 @@ Learning Locker (in the "raw" format).
 
 ## Installation
 ### For users:
-Simply download the latest `xAPI-Data-Analyzer.exe` file and double-click it to launch the program. 
+Simply download the latest `xAPI-Data-Analyzer.exe` file (found in this repo's "Releases") and double-click it to launch the program. 
 
 You may get a popup from Windows on your first launch warning about a potential security risk -- this is because the 
 .exe is not signed by a registered Microsoft developer. Always exercise caution when running any unknown executables, 
