@@ -42,7 +42,9 @@ def set_data_vars(data_path, json_path):
     raw_data["Email"] = raw_data["Email"].str.slice(start=7)
 
     # Convert the Timestamp column to datetime objects
-    raw_data["Timestamp"] = pd.to_datetime(raw_data["Timestamp"])
+    raw_data["Timestamp"] = pd.to_datetime(raw_data["Timestamp"], errors='coerce')
+    # Drop all rows where the datetime conversion failed
+    raw_data = raw_data.dropna(subset=["Timestamp"])
 
     # Parse the actual object ID from the "object id" column
     url_list = raw_data["object id"].to_list()
