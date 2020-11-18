@@ -35,19 +35,18 @@ def set_data_vars(data_path, json_path):
     # Only keep around columns we care about
     raw_data = raw_data[["Email", "Verb", "object id", "Question/Slide", "Timestamp", "Duration"]]
 
-    # Drop data that doesn't have an email associated with it
-    raw_data = raw_data.dropna(subset=["Email"])
+    # Convert the Timestamp column to datetime objects
+    raw_data["Timestamp"] = pd.to_datetime(raw_data["Timestamp"], errors='coerce')
+    # Drop all rows where the datetime conversion failed or where email doesn't exist, b/c that means they're bad data
+    raw_data = raw_data.dropna(subset=["Timestamp", "Email"])
 
-    # Drop all "consumed" verbs b/c they seem to be pretty useless
-    raw_data = raw_data[raw_data["Verb"] != 'consumed']
-
+    # Drop all columns that don't have a valid email URL, b/c that means they're bad data
+    raw_data = raw_data[raw_data["Email"].str.slice(start=0, stop=7).str.fullmatch("mailto:", case=False)]
     # Reformat email column to remove the "mailto:"
     raw_data["Email"] = raw_data["Email"].str.slice(start=7)
 
-    # Convert the Timestamp column to datetime objects
-    raw_data["Timestamp"] = pd.to_datetime(raw_data["Timestamp"], errors='coerce')
-    # Drop all rows where the datetime conversion failed
-    raw_data = raw_data.dropna(subset=["Timestamp"])
+    # Drop all "consumed" verbs b/c they seem to be pretty useless
+    raw_data = raw_data[raw_data["Verb"] != 'consumed']
 
     # Parse the actual object ID from the "object id" column
     url_list = raw_data["object id"].to_list()
