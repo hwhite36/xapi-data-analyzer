@@ -10,6 +10,7 @@ import os
 import json
 import webbrowser
 import jsonschema
+import traceback
 
 
 def create_main_window():
@@ -229,7 +230,7 @@ def main():
             except jsonschema.exceptions.ValidationError as e:
                 message = str(e.message).replace("^Day_\\\\d{1,2}$", "Day_XX")
                 sg.Popup("ERROR: The DayElement.json file is invalid, please check the Schema to ensure validity. \n"
-                        + message, title="Error")
+                         + message, title="Error")
                 continue
 
             # Generate a timestamp for naming the files
@@ -281,4 +282,13 @@ def main():
     main_window.close()
 
 
-main()
+# Kinda bad practice to have such a broad exception clause but it works well in our use case so the program exits
+# gracefully and we can easily debug
+try:
+    main()
+except Exception:
+    sg.Popup("An unexpected error occurred that caused the program to crash. An error log text file was created in "
+             "the current directory called 'xAPI-Data-Analyzer-ERROR-LOG.txt'. Please consider filing a bug report on "
+             "our GitHub page with this file.", title="Fatal Error")
+    with open("xAPI-Data-Analyzer-ERROR-LOG.txt", "a") as error_file:
+        traceback.print_exc(file=error_file)
