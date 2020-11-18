@@ -29,6 +29,9 @@ def set_data_vars(data_path, json_path):
 
     raw_data = pd.read_csv(data_path)
 
+    # Uncomment below to print the number of bytes the dataframe takes in memory
+    # print("raw data: " + str(raw_data.memory_usage(index=True, deep=True).sum()))
+
     # Only keep around columns we care about
     raw_data = raw_data[["Email", "Verb", "object id", "Question/Slide", "Timestamp", "Duration"]]
 
