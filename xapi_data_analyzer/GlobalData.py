@@ -60,7 +60,7 @@ def set_data_vars(data_path, json_path):
     if rows_dropped_timestamp != 0 or rows_dropped_email_nan != 0 or rows_dropped_bad_email != 0:
         sg.Popup("Some data was dropped because of improper formatting:\nBad timestamp: " + str(rows_dropped_timestamp)
                  + " entries\nNo email associated: " + str(rows_dropped_email_nan) + " entries\nBad email value: " +
-                 str(rows_dropped_bad_email) + " entries", title="Info: Data dropped")
+                 str(rows_dropped_bad_email) + " entries", title="Info: Data Dropped")
 
     # Drop all "consumed" verbs b/c they seem to be pretty useless
     raw_data = raw_data[raw_data["Verb"] != 'consumed']
