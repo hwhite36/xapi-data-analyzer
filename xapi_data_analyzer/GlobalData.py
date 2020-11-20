@@ -3,6 +3,7 @@ import json
 from jsonschema import validate
 from os import path
 import sys
+import PySimpleGUI as sg
 
 
 raw_data = None
@@ -38,12 +39,28 @@ def set_data_vars(data_path, json_path):
     # Convert the Timestamp column to datetime objects
     raw_data["Timestamp"] = pd.to_datetime(raw_data["Timestamp"], errors='coerce')
     # Drop all rows where the datetime conversion failed or where email doesn't exist, b/c that means they're bad data
-    raw_data = raw_data.dropna(subset=["Timestamp", "Email"])
+    rows_count = len(raw_data.index)
+    raw_data = raw_data.dropna(subset=["Timestamp"])
+    rows_dropped_timestamp = rows_count - len(raw_data.index)
+
+    # Drop all columns with an NaN email, b/c that's bad data
+    rows_count = len(raw_data.index)
+    raw_data = raw_data.dropna(subset=["Email"])
+    rows_dropped_email_nan = rows_count - len(raw_data.index)
 
     # Drop all columns that don't have a valid email URL, b/c that means they're bad data
+    rows_count = len(raw_data.index)
     raw_data = raw_data[raw_data["Email"].str.slice(start=0, stop=7).str.fullmatch("mailto:", case=False)]
+    rows_dropped_bad_email = rows_count - len(raw_data.index)
+
     # Reformat email column to remove the "mailto:"
     raw_data["Email"] = raw_data["Email"].str.slice(start=7)
+
+    # Give notice popup about dropped rows
+    if rows_dropped_timestamp != 0 or rows_dropped_email_nan != 0 or rows_dropped_bad_email != 0:
+        sg.Popup("Some data was dropped because of improper formatting:\nBad timestamp: " + str(rows_dropped_timestamp)
+                 + " entries\nNo email associated: " + str(rows_dropped_email_nan) + " entries\nBad email value: " +
+                 str(rows_dropped_bad_email) + " entries", title="Info: Data Dropped")
 
     # Drop all "consumed" verbs b/c they seem to be pretty useless
     raw_data = raw_data[raw_data["Verb"] != 'consumed']
