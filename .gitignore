@@ -18,7 +18,12 @@ venv
 /*.egg-info
 /*.egg
 
+# Jupyter Notebooks
+Notebooks/
 *ipynb*
+
+# No error logs
+*ERROR-LOG.txt
 
 *.zip
 

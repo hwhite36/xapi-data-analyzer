@@ -71,6 +71,9 @@ def set_data_vars(data_path, json_path):
                for s in url_list]
     raw_data["object id"] = id_list
 
+    # Sort the timestamp column to ensure times are not out of order
+    raw_data = raw_data.sort_values(by=['Timestamp'], ascending=False)
+
     class_list = set(raw_data["Email"])
 
     # import data in DayElement.json (Error handling done in Main.py)
