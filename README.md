@@ -136,7 +136,7 @@ Associated with each student is
     * This is calculated by computing the total time in between each interaction. Gaps larger than `Time_Delta` (more info about this below) are ignored.
 
 ### The DayElement.json File
-This file contains required configuration information.
+This JSON file contains required configuration information for the program to run. If you aren't familiar with JSON, [here's](https://towardsdatascience.com/an-introduction-to-json-c9acb464f43e) a good introduction.
 The file has data regarding which emails to filter, the 'time_delta', and each textbook chapter.
 The schema can be found DayElementSchema.json, and more detail is also included below.
 A sample DayElement.json file is included in the repository.
