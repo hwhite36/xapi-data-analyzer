@@ -55,7 +55,7 @@ def set_data_vars(data_path, json_path):
     # rows_dropped_bad_email = rows_count - len(raw_data.index)
 
     # Reformat email column to remove the "mailto:"
-    raw_data["Email"] = raw_data["Email"].str.slice(start=7)
+    # raw_data["Email"] = raw_data["Email"].str.slice(start=7)
 
     # Give notice popup about dropped rows
     if rows_dropped_timestamp != 0 or rows_dropped_name_nan != 0:
@@ -92,4 +92,5 @@ def set_data_vars(data_path, json_path):
         # Commented out Spring 2021 upon switch to UUIDs
         # raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
         # class_list = class_list - set(DayInfo["Filter_Emails"])
-        # delta_max = DayInfo["Time_Delta"]
+
+        delta_max = DayInfo["Time_Delta"]
