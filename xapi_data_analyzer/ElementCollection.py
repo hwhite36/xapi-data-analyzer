@@ -37,7 +37,7 @@ class ElementCollection:
         question_name_dict = dict.fromkeys(self.id_list)
         interacted_dict = {k: [] for k in self.id_list}
 
-        for row in zip(self.data["Email"], self.data["object id"], self.data["Question/Slide"]):
+        for row in zip(self.data["Name"], self.data["object id"], self.data["Question/Slide"]):
             # Question name dict stuff
             if pd.notna(row[2]):
                 question_name_dict[row[1]] = row[2]
@@ -68,7 +68,7 @@ class ElementCollection:
 
     def get_students_duration(self, delta_max):
         """
-        Calculates each student's time spent on the range of
+        Calculates each student's time spent on the range of H5P IDs.
 
         :param: delta_max
         :return: a dictionary mapping students to their duration
@@ -76,7 +76,7 @@ class ElementCollection:
         durations = {}
         delta_max = datetime.timedelta(minutes=delta_max)
         for student in self.class_list:
-            student_df = self.data[self.data['Email'] == student].reset_index()
+            student_df = self.data[self.data['Name'] == student].reset_index()
             duration = datetime.timedelta()
             for index in range(0, len(student_df) - 1):
                 delta = student_df.iloc[index]['Timestamp'] - student_df.iloc[index + 1]['Timestamp']

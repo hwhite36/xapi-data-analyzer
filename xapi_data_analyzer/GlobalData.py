@@ -34,7 +34,7 @@ def set_data_vars(data_path, json_path):
     # print("raw data: " + str(raw_data.memory_usage(index=True, deep=True).sum()))
 
     # Only keep around columns we care about
-    raw_data = raw_data[["Email", "Verb", "object id", "Question/Slide", "Timestamp", "Duration"]]
+    raw_data = raw_data[["Name", "Verb", "object id", "Question/Slide", "Timestamp", "Duration"]]
 
     # Convert the Timestamp column to datetime objects
     raw_data["Timestamp"] = pd.to_datetime(raw_data["Timestamp"], errors='coerce')
@@ -45,22 +45,23 @@ def set_data_vars(data_path, json_path):
 
     # Drop all columns with an NaN email, b/c that's bad data
     rows_count = len(raw_data.index)
-    raw_data = raw_data.dropna(subset=["Email"])
-    rows_dropped_email_nan = rows_count - len(raw_data.index)
+    raw_data = raw_data.dropna(subset=["Name"])
+    rows_dropped_name_nan = rows_count - len(raw_data.index)
 
     # Drop all columns that don't have a valid email URL, b/c that means they're bad data
-    rows_count = len(raw_data.index)
-    raw_data = raw_data[raw_data["Email"].str.slice(start=0, stop=7).str.fullmatch("mailto:", case=False)]
-    rows_dropped_bad_email = rows_count - len(raw_data.index)
+    # Commented out Spring 2021 when reverting to using UUIDs
+    # rows_count = len(raw_data.index)
+    # raw_data = raw_data[raw_data["Email"].str.slice(start=0, stop=7).str.fullmatch("mailto:", case=False)]
+    # rows_dropped_bad_email = rows_count - len(raw_data.index)
 
     # Reformat email column to remove the "mailto:"
     raw_data["Email"] = raw_data["Email"].str.slice(start=7)
 
     # Give notice popup about dropped rows
-    if rows_dropped_timestamp != 0 or rows_dropped_email_nan != 0 or rows_dropped_bad_email != 0:
+    if rows_dropped_timestamp != 0 or rows_dropped_name_nan != 0:
         sg.Popup("Some data was dropped because of improper formatting:\nBad timestamp: " + str(rows_dropped_timestamp)
-                 + " entries\nNo email associated: " + str(rows_dropped_email_nan) + " entries\nBad email value: " +
-                 str(rows_dropped_bad_email) + " entries", title="Info: Data Dropped")
+                 + " entries\nNo email associated: " + str(rows_dropped_name_nan) + " entries",
+                 title="Info: Data Dropped")
 
     # Drop all "consumed" verbs b/c they seem to be pretty useless
     raw_data = raw_data[raw_data["Verb"] != 'consumed']
@@ -74,7 +75,7 @@ def set_data_vars(data_path, json_path):
     # Sort the timestamp column to ensure times are not out of order
     raw_data = raw_data.sort_values(by=['Timestamp'], ascending=False)
 
-    class_list = set(raw_data["Email"])
+    class_list = set(raw_data["Name"])
 
     # import data in DayElement.json (Error handling done in Main.py)
     with open(json_path) as f:
@@ -88,6 +89,7 @@ def set_data_vars(data_path, json_path):
             validate(instance=DayInfo, schema=schema)
 
         # Drop data from non-student emails (using the filter emails list)
-        raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
-        class_list = class_list - set(DayInfo["Filter_Emails"])
-        delta_max = DayInfo["Time_Delta"]
+        # Commented out Spring 2021 upon switch to UUIDs
+        # raw_data = raw_data[~raw_data["Email"].isin(DayInfo["Filter_Emails"])]
+        # class_list = class_list - set(DayInfo["Filter_Emails"])
+        # delta_max = DayInfo["Time_Delta"]
