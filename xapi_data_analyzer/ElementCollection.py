@@ -76,7 +76,16 @@ class ElementCollection:
         """
         durations = {}
         delta_max = datetime.timedelta(minutes=delta_max)
-        for student in self.class_list:
+
+        # swap out emails for uuids anywhere we can before creating the dict
+        uuid_and_email_class_list = []
+        for uuid in self.class_list:
+            if self.uuid_email_dict[uuid]:
+                uuid_and_email_class_list.append(self.uuid_email_dict[uuid])
+            else:
+                uuid_and_email_class_list.append(uuid)
+
+        for student in uuid_and_email_class_list:
             student_df = self.data[self.data['Name'] == student].reset_index()
             duration = datetime.timedelta()
             for index in range(0, len(student_df) - 1):
