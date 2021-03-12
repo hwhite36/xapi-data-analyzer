@@ -60,7 +60,7 @@ def set_data_vars(data_path, json_path):
     # Give notice popup about dropped rows
     if rows_dropped_timestamp != 0 or rows_dropped_name_nan != 0:
         sg.Popup("Some data was dropped because of improper formatting:\nBad timestamp: " + str(rows_dropped_timestamp)
-                 + " entries\nNo email associated: " + str(rows_dropped_name_nan) + " entries",
+                 + " entries\nNo UUID associated: " + str(rows_dropped_name_nan) + " entries",
                  title="Info: Data Dropped")
 
     # Drop all "consumed" verbs b/c they seem to be pretty useless

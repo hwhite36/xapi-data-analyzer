@@ -80,7 +80,7 @@ class ElementCollection:
         # swap out emails for uuids anywhere we can before creating the dict
         uuid_and_email_class_list = []
         for uuid in self.class_list:
-            if self.uuid_email_dict[uuid]:
+            if uuid in self.uuid_email_dict:
                 uuid_and_email_class_list.append(self.uuid_email_dict[uuid])
             else:
                 uuid_and_email_class_list.append(uuid)
@@ -110,14 +110,17 @@ class ElementCollection:
         interacted_dict_values = self.interacted_dict.values()
 
         # replace all uuids with names, if we're able to
-        users_who_interacted = []
-        for uuid in interacted_dict_values:
-            if self.uuid_email_dict[uuid]:
-                users_who_interacted.append(self.uuid_email_dict[uuid])
-            else:
-                users_who_interacted.append(uuid)
+        users_who_interacted = []  # This is a 2-D list
+        for list_of_uuids in interacted_dict_values:
+            users_for_this_element = []
+            for uuid in list_of_uuids:
+                if uuid in self.uuid_email_dict:
+                    users_for_this_element.append(self.uuid_email_dict[uuid])
+                else:
+                    users_for_this_element.append(uuid)
+            users_who_interacted.append(users_for_this_element)
 
-        df["List of users who interacted"] = set(users_who_interacted)
+        df["List of users who interacted"] = users_who_interacted
         df["Number of users who interacted"] = [len(val) for val in interacted_dict_values]
         df["% of users who interacted"] = self.get_percent_interacted().values()
         return df
