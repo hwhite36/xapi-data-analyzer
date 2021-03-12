@@ -13,11 +13,12 @@ class ElementCollection:
     - The time spent on the element
     """
 
-    def __init__(self, id_list, data, class_list):
+    def __init__(self, id_list, data, class_list, uuid_email_dict):
         self.id_list = id_list
         self.data = data[data["object id"].isin(self.id_list)]  # Now data can be trimmed
         self.class_list = class_list
         self.class_size = len(class_list)
+        self.uuid_email_dict = uuid_email_dict
 
         # Below are vars that are expensive time-wise to calculate, so we make em instance vars and calculate only once
         self.question_name_dict = None
@@ -98,7 +99,16 @@ class ElementCollection:
         df["object id"] = self.id_list
         df["Element Name"] = self.question_name_dict.values()
         interacted_dict_values = self.interacted_dict.values()
-        df["List of users who interacted"] = interacted_dict_values
+
+        # replace all uuids with names, if we're able to
+        users_who_interacted = []
+        for uuid in interacted_dict_values:
+            if self.uuid_email_dict[uuid]:
+                users_who_interacted.append(self.uuid_email_dict[uuid])
+            else:
+                users_who_interacted.append(uuid)
+
+        df["List of users who interacted"] = set(users_who_interacted)
         df["Number of users who interacted"] = [len(val) for val in interacted_dict_values]
         df["% of users who interacted"] = self.get_percent_interacted().values()
         return df
