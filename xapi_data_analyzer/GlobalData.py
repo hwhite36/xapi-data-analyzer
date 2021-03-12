@@ -10,6 +10,7 @@ raw_data = None
 class_list = None
 DayInfo = None
 delta_max = None
+UUID_to_email = None
 
 
 def set_data_vars(data_path, json_path):
@@ -27,14 +28,17 @@ def set_data_vars(data_path, json_path):
     global class_list
     global DayInfo
     global delta_max
+    global UUID_to_email
 
     raw_data = pd.read_csv(data_path)
 
     # Uncomment below to print the number of bytes the dataframe takes in memory
     # print("raw data: " + str(raw_data.memory_usage(index=True, deep=True).sum()))
+    UUID_to_email = find_emails(raw_data)
 
     # Only keep around columns we care about
-    raw_data = raw_data[["Name", "Verb", "object id", "Question/Slide", "Timestamp", "Duration"]]
+    raw_data = raw_data[["Name", "Verb", "object id", "Question/Slide", "Timestamp", "Duration", "Response"]]
+
 
     # Convert the Timestamp column to datetime objects
     raw_data["Timestamp"] = pd.to_datetime(raw_data["Timestamp"], errors='coerce')
@@ -94,3 +98,13 @@ def set_data_vars(data_path, json_path):
         # class_list = class_list - set(DayInfo["Filter_Emails"])
 
         delta_max = DayInfo["Time_Delta"]
+
+
+def find_emails(df):
+    # Define an email regex and find responses that are emails
+    email_regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
+    email_rows = df[df.Response.str.match(email_regex, na=False)]
+
+    # Transform this new df into a dictionary mapping name->email
+    email_rows = email_rows[["Name", "Response"]].set_index("Name")
+    return email_rows.T.to_dict('list')
