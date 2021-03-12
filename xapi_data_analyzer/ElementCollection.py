@@ -85,8 +85,8 @@ class ElementCollection:
             else:
                 uuid_and_email_class_list.append(uuid)
 
-        for student in uuid_and_email_class_list:
-            student_df = self.data[self.data['Name'] == student].reset_index()
+        for student, uuid in zip(uuid_and_email_class_list, self.class_list):
+            student_df = self.data[self.data['Name'] == uuid].reset_index()
             duration = datetime.timedelta()
             for index in range(0, len(student_df) - 1):
                 delta = student_df.iloc[index]['Timestamp'] - student_df.iloc[index + 1]['Timestamp']
