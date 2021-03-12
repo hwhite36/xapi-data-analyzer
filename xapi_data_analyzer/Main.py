@@ -62,7 +62,7 @@ def use_id_list(id_list, timestamp):
     os.mkdir(save_folder)
 
     # Create ElementCollection object + dataframe
-    element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list)
+    element_collection = ElementCollection(id_list, GlobalData.raw_data, GlobalData.class_list, GlobalData.UUID_to_email)
     elements_df = element_collection.get_dataframe()
     elements_df.to_csv(save_folder / "ElementCollection.csv")
 
@@ -98,7 +98,7 @@ def use_json(timestamp, day_dict_list):
         unit_name = "Unit" + str(day['Unit'])
 
         # Check that data for the given Day exists
-        element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list)
+        element_collection = ElementCollection(day_ids, GlobalData.raw_data, GlobalData.class_list, GlobalData.UUID_to_email)
         if not element_collection.data.empty:
             # Create where we want to store the csvs and graphs
             day_folder = base_folder / ("Day" + str(day_num))
