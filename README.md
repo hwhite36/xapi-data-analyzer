@@ -54,8 +54,8 @@ The program is designed for this data to be cumulative, although any section of 
 #### A note on data format
 The program looks for the following columns in the spreadsheet (in any order):
 
-* `Email`
-    * contains email addresses prefaced by `mailto:`
+* `Name`
+    * contains a UUID for each user
 * `Verb`
     * contains H5P ID verbs, such as "interacted", "answered", etc
 * `object id`
@@ -66,6 +66,8 @@ The program looks for the following columns in the spreadsheet (in any order):
     * contains standard-format timestamps of interactions
 * `Duration`
     * contains the seconds that someone spends interacting with an element (unreliable, but can still be helpful)
+* `Response`
+    * contains any responses to H5P elements that a user enters (mostly used to collect email addresses in an H5P Essay element for the purpose of associating with UUIDs)
 
 The raw data *should* already be in an appropriate format, but it's important to note that **the tool requires that these columns
 exist with these exact names!**
