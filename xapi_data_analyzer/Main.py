@@ -87,7 +87,14 @@ def use_json(timestamp, day_dict_list):
     base_folder = Path("xAPI-Data-Analyzer_" + timestamp + "/")
     os.mkdir(base_folder)
 
-    students_master = pd.DataFrame(index=GlobalData.class_list)
+    uuid_and_email_class_list = []
+    for uuid in GlobalData.class_list:
+        if uuid in GlobalData.UUID_to_email:
+            uuid_and_email_class_list.append(GlobalData.UUID_to_email[uuid])
+        else:
+            uuid_and_email_class_list.append(uuid)
+
+    students_master = pd.DataFrame(index=uuid_and_email_class_list)
     units = []
 
     for i, day in enumerate(day_dict_list, 1):
