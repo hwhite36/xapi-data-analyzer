@@ -107,4 +107,8 @@ def find_emails(df):
 
     # Transform this new df into a dictionary mapping name->email
     email_rows = email_rows[["Name", "Response"]].set_index("Name")
-    return email_rows.T.to_dict('list')
+    dictionary =  email_rows.T.to_dict('list')
+    # Remove lists
+    for key in dictionary:
+        dictionary[key] = dictionary[key][0]
+    return dictionary
