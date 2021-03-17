@@ -8,6 +8,8 @@ It was created with the goal of parsing and analyzing xAPI data created from H5P
 Pressbooks online textbook. The program relies on the data being present as an exported .csv file from the UW-Madison 
 Learning Locker (in the "raw" format).
 
+This version identifies users who are logged in by tracking their emails. It will not be useful if a majority of users
+are not signed in (or if the textbook pages are not embedded in Canvas).
 
 ## Installation
 ### For users:
