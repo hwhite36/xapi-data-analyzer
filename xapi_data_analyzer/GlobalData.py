@@ -39,7 +39,6 @@ def set_data_vars(data_path, json_path):
     # Only keep around columns we care about
     raw_data = raw_data[["Name", "Verb", "object id", "Question/Slide", "Timestamp", "Duration", "Response"]]
 
-
     # Convert the Timestamp column to datetime objects
     raw_data["Timestamp"] = pd.to_datetime(raw_data["Timestamp"], errors='coerce')
     # Drop all rows where the datetime conversion failed or where email doesn't exist, b/c that means they're bad data
@@ -102,13 +101,14 @@ def set_data_vars(data_path, json_path):
 
 def find_emails(df):
     # Define an email regex and find responses that are emails
-    email_regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
-    email_rows = df[df.Response.str.match(email_regex, na=False)]
+    email_regex = '([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)'
+    email_rows = df.Response.str.extract(email_regex, expand=False)
 
-    # Transform this new df into a dictionary mapping name->email
-    email_rows = email_rows[["Name", "Response"]].set_index("Name")
-    dictionary =  email_rows.T.to_dict('list')
+    # Transform this into a new df, then into a dictionary mapping name->email
+    email_df = pd.DataFrame({'Name': df.Name, 'Response': email_rows}).dropna().set_index("Name")
+    dictionary = email_df.T.to_dict('list')  # T = transposition, some wacky stuff from stack overflow
     # Remove lists
     for key in dictionary:
         dictionary[key] = dictionary[key][0]
+
     return dictionary
